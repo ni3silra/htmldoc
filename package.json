@@ -2,6 +2,7 @@
   "name": "html-diagram-library",
   "version": "1.0.0",
   "description": "A JavaScript library for creating architectural diagrams using HTML-like syntax",
+  "type": "module",
   "main": "dist/html-diagram-library.js",
   "scripts": {
     "build": "webpack --mode=production",
@@ -43,6 +44,7 @@
     "html-webpack-plugin": "^5.5.0",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
+    "jsdom": "^26.1.0",
     "rimraf": "^5.0.0",
     "style-loader": "^3.3.0",
     "webpack": "^5.88.0",
