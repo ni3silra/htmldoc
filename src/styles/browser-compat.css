@@ -1,0 +1,253 @@
+/**
+ * Cross-browser compatibility styles for HTML Diagram Library
+ * Handles browser-specific quirks and ensures consistent rendering
+ */
+
+/* CSS Reset for consistent cross-browser behavior */
+.html-diagram-container {
+  /* Normalize box-sizing across browsers */
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  
+  /* Prevent iOS Safari zoom on double-tap */
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  
+  /* Prevent text selection in IE */
+  -ms-user-select: none;
+}
+
+/* SVG rendering optimizations */
+.html-diagram-svg {
+  /* Improve SVG rendering in older browsers */
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  backface-visibility: hidden;
+  
+  /* Force hardware acceleration where supported */
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  
+  /* Improve text rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  
+  /* Prevent selection highlighting */
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Firefox-specific fixes */
+@-moz-document url-prefix() {
+  .html-diagram-svg {
+    /* Fix SVG scaling issues in Firefox */
+    width: 100%;
+    height: 100%;
+  }
+  
+  .diagram-node text {
+    /* Fix text positioning in Firefox */
+    dominant-baseline: middle;
+  }
+}
+
+/* Safari-specific fixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .html-diagram-svg {
+    /* Improve SVG rendering in Safari */
+    -webkit-transform: translate3d(0, 0, 0);
+  }
+  
+  .diagram-node {
+    /* Fix hover states in Safari */
+    -webkit-transform: translateZ(0);
+  }
+}
+
+/* Internet Explorer and Edge Legacy fixes */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  .html-diagram-svg {
+    /* Fix SVG display in IE/Edge */
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  
+  .diagram-node rect,
+  .diagram-node ellipse {
+    /* Fix shape rendering in IE */
+    vector-effect: non-scaling-stroke;
+  }
+  
+  .diagram-tooltip {
+    /* Fix tooltip positioning in IE */
+    position: absolute !important;
+  }
+}
+
+/* Chrome-specific optimizations */
+@media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
+  .html-diagram-svg {
+    /* Optimize rendering in Chrome */
+    will-change: transform;
+  }
+  
+  .diagram-node:hover {
+    /* Smooth hover animations in Chrome */
+    will-change: transform;
+  }
+}
+
+/* High DPI display support */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .html-diagram-svg {
+    /* Improve rendering on high DPI displays */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+  
+  .diagram-node text {
+    /* Improve text rendering on retina displays */
+    -webkit-font-smoothing: subpixel-antialiased;
+  }
+}
+
+/* Flexbox fallbacks for older browsers */
+.diagram-loading {
+  /* Fallback for browsers without flexbox */
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+
+/* Support for browsers without CSS Grid */
+.diagram-controls {
+  /* Fallback layout for older browsers */
+  display: block;
+}
+
+/* Animation fallbacks */
+@supports not (animation: none) {
+  .diagram-loading-spinner {
+    /* Fallback for browsers without CSS animations */
+    background: url('data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wjRLEuQRNnGt7QpVdNhHJBkaIrdoyiiRWAI3RYODBawuYn3I4d2ASKRWmBQAh+QQJCgAAACwAAAAAEAAQAAADMQi63P4QyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wjRLEuQRNnGt7QpVdNhHJBkaIrdoyiiRWAI3RYODBawuYn3I4d2ASKRWmBQAh+QQJCgAAACwAAAAAEAAQAAADMQi63P4QyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAA7') no-repeat center center;
+    width: 40px;
+    height: 40px;
+    border: none;
+  }
+}
+
+/* Transform fallbacks */
+@supports not (transform: scale(1)) {
+  .diagram-node:hover {
+    /* Fallback for browsers without CSS transforms */
+    opacity: 0.8;
+  }
+}
+
+/* Transition fallbacks */
+@supports not (transition: all 0.3s ease) {
+  .diagram-node,
+  .diagram-tooltip {
+    /* Remove transitions for unsupported browsers */
+    transition: none;
+  }
+}
+
+/* Filter fallbacks for shadow effects */
+@supports not (filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1))) {
+  .diagram-control-button {
+    /* Fallback shadow using border */
+    border-bottom: 2px solid #dee2e6;
+    border-right: 1px solid #dee2e6;
+  }
+}
+
+/* Viewport units fallbacks */
+@supports not (width: 100vw) {
+  .html-diagram-container {
+    /* Fallback for browsers without viewport units */
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* Custom properties (CSS variables) fallbacks */
+@supports not (color: var(--primary-color)) {
+  .diagram-node rect {
+    /* Fallback colors for browsers without CSS custom properties */
+    fill: #ffffff;
+    stroke: #e1e5e9;
+  }
+  
+  .diagram-edge line {
+    stroke: #6c757d;
+  }
+}
+
+/* Object-fit fallbacks */
+@supports not (object-fit: contain) {
+  .node-icon {
+    /* Fallback for browsers without object-fit */
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+/* Sticky positioning fallbacks */
+@supports not (position: sticky) {
+  .diagram-controls {
+    /* Fallback to absolute positioning */
+    position: absolute;
+  }
+}
+
+/* Grid fallbacks */
+@supports not (display: grid) {
+  .diagram-layout-grid {
+    /* Fallback to flexbox or float layout */
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+/* Clip-path fallbacks */
+@supports not (clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%)) {
+  .diagram-node-clipped {
+    /* Fallback using overflow hidden */
+    overflow: hidden;
+  }
+}
+
+/* Backdrop-filter fallbacks */
+@supports not (backdrop-filter: blur(10px)) {
+  .diagram-tooltip {
+    /* Fallback to solid background */
+    background-color: rgba(33, 37, 41, 0.95);
+  }
+}
+
+/* Scroll behavior fallbacks */
+@supports not (scroll-behavior: smooth) {
+  .html-diagram-container {
+    /* Disable smooth scrolling for unsupported browsers */
+    scroll-behavior: auto;
+  }
+}
+
+/* Aspect ratio fallbacks */
+@supports not (aspect-ratio: 16/9) {
+  .diagram-node-square::before {
+    /* Fallback aspect ratio using padding trick */
+    content: '';
+    display: block;
+    padding-top: 100%;
+  }
+}

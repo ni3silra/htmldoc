@@ -1,0 +1,8 @@
+/**
+ * Main stylesheet for HTML Diagram Library
+ * Imports all necessary CSS files for cross-browser compatibility
+ */
+
+@import url('./diagram.css');
+@import url('./browser-compat.css');
+@import url('./animations.css');

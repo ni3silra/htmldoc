@@ -1,0 +1,392 @@
+/**
+ * Animation styles for HTML Diagram Library
+ * Smooth transitions and animations for interactive elements
+ */
+
+/* Base animation settings */
+:root {
+  --animation-duration-fast: 150ms;
+  --animation-duration-normal: 300ms;
+  --animation-duration-slow: 500ms;
+  --animation-easing: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --animation-easing-in: cubic-bezier(0.42, 0, 1, 1);
+  --animation-easing-out: cubic-bezier(0, 0, 0.58, 1);
+  --animation-easing-in-out: cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+/* Node animations */
+.diagram-node {
+  transition: transform var(--animation-duration-normal) var(--animation-easing),
+              opacity var(--animation-duration-fast) ease;
+}
+
+.diagram-node-enter {
+  opacity: 0;
+  transform: scale(0.8);
+  animation: nodeEnter var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.diagram-node-exit {
+  animation: nodeExit var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+@keyframes nodeEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes nodeExit {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+/* Node hover animations */
+.diagram-node:hover {
+  transform: scale(1.02);
+  transition: transform var(--animation-duration-fast) var(--animation-easing-out);
+}
+
+.diagram-node:active {
+  transform: scale(0.98);
+  transition: transform 100ms var(--animation-easing-in);
+}
+
+/* Node selection animations */
+.diagram-node.selected {
+  animation: nodeSelected var(--animation-duration-normal) var(--animation-easing);
+}
+
+@keyframes nodeSelected {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1.02);
+  }
+}
+
+/* Edge animations */
+.diagram-edge {
+  transition: opacity var(--animation-duration-fast) ease,
+              stroke-width var(--animation-duration-fast) ease;
+}
+
+.diagram-edge-enter {
+  opacity: 0;
+  animation: edgeEnter var(--animation-duration-slow) var(--animation-easing) forwards;
+}
+
+.diagram-edge-exit {
+  animation: edgeExit var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+@keyframes edgeEnter {
+  from {
+    opacity: 0;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+  }
+  to {
+    opacity: 1;
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes edgeExit {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Edge hover animations */
+.diagram-edge:hover {
+  stroke-width: 3;
+  opacity: 1;
+}
+
+/* Layout transition animations */
+.diagram-layout-transition .diagram-node {
+  transition: transform var(--animation-duration-slow) var(--animation-easing);
+}
+
+.diagram-layout-transition .diagram-edge {
+  transition: d var(--animation-duration-slow) var(--animation-easing);
+}
+
+/* Zoom and pan animations */
+.diagram-zoom-transition {
+  transition: transform var(--animation-duration-normal) var(--animation-easing);
+}
+
+/* Tooltip animations */
+.diagram-tooltip {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity var(--animation-duration-fast) ease,
+              transform var(--animation-duration-fast) var(--animation-easing-out);
+}
+
+.diagram-tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Loading animations */
+.diagram-loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.diagram-loading-dots {
+  display: inline-block;
+}
+
+.diagram-loading-dots::after {
+  content: '';
+  animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% {
+    content: '';
+  }
+  40% {
+    content: '.';
+  }
+  60% {
+    content: '..';
+  }
+  80%, 100% {
+    content: '...';
+  }
+}
+
+/* Pulse animation for active elements */
+.diagram-pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Shake animation for errors */
+.diagram-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+/* Bounce animation for notifications */
+.diagram-bounce {
+  animation: bounce 0.6s ease-in-out;
+}
+
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40%, 43% {
+    transform: translateY(-15px);
+  }
+  70% {
+    transform: translateY(-7px);
+  }
+  90% {
+    transform: translateY(-3px);
+  }
+}
+
+/* Fade animations */
+.diagram-fade-in {
+  animation: fadeIn var(--animation-duration-normal) ease-in;
+}
+
+.diagram-fade-out {
+  animation: fadeOut var(--animation-duration-normal) ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Slide animations */
+.diagram-slide-in-up {
+  animation: slideInUp var(--animation-duration-normal) var(--animation-easing);
+}
+
+.diagram-slide-out-down {
+  animation: slideOutDown var(--animation-duration-normal) var(--animation-easing);
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutDown {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+/* Scale animations */
+.diagram-scale-in {
+  animation: scaleIn var(--animation-duration-normal) var(--animation-easing);
+}
+
+.diagram-scale-out {
+  animation: scaleOut var(--animation-duration-normal) var(--animation-easing);
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+/* Stagger animations for multiple elements */
+.diagram-stagger-enter .diagram-node:nth-child(1) { animation-delay: 0ms; }
+.diagram-stagger-enter .diagram-node:nth-child(2) { animation-delay: 100ms; }
+.diagram-stagger-enter .diagram-node:nth-child(3) { animation-delay: 200ms; }
+.diagram-stagger-enter .diagram-node:nth-child(4) { animation-delay: 300ms; }
+.diagram-stagger-enter .diagram-node:nth-child(5) { animation-delay: 400ms; }
+.diagram-stagger-enter .diagram-node:nth-child(n+6) { animation-delay: 500ms; }
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .diagram-loading-spinner {
+    animation: none;
+    border-top-color: transparent;
+  }
+  
+  .diagram-pulse,
+  .diagram-bounce,
+  .diagram-shake {
+    animation: none;
+  }
+}
+
+/* High contrast mode adjustments */
+@media (prefers-contrast: high) {
+  .diagram-node,
+  .diagram-edge {
+    transition-duration: 0.1s;
+  }
+}
+
+/* Performance optimizations */
+.diagram-node,
+.diagram-edge {
+  will-change: transform, opacity;
+}
+
+.diagram-node:hover,
+.diagram-edge:hover {
+  will-change: transform, opacity, stroke-width;
+}
+
+/* GPU acceleration for smooth animations */
+.diagram-node-enter,
+.diagram-node-exit,
+.diagram-edge-enter,
+.diagram-edge-exit {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
