@@ -9,10 +9,13 @@ module.exports = (env, argv) => {
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: isProduction ? 'html-diagram-library.min.js' : 'html-diagram-library.js',
-      library: 'HTMLDiagramLibrary',
-      libraryTarget: 'umd',
+      library: {
+        name: 'HTMLDiagramLibrary',
+        type: 'umd',
+        export: 'default'
+      },
       globalObject: 'this',
-      clean: true
+      clean: false
     },
     module: {
       rules: [
@@ -50,19 +53,21 @@ module.exports = (env, argv) => {
       hot: true
     },
     plugins: [
-      new HtmlWebpackPlugin({
-        template: './examples/index.html',
-        filename: 'index.html',
-        inject: 'head'
-      })
+      // Only include HTML plugin for development server
+      ...(argv.mode === 'development' && process.env.WEBPACK_SERVE ? [
+        new HtmlWebpackPlugin({
+          template: './examples/index.html',
+          filename: 'index.html',
+          inject: 'head'
+        })
+      ] : [])
     ],
     optimization: {
       minimize: isProduction,
       usedExports: true,
       sideEffects: false
     },
-    externals: isProduction ? {} : {
-      // For development, we can externalize large dependencies if needed
-    }
+    // Ensure all dependencies are bundled for CDN distribution
+    externals: {}
   };
 };
