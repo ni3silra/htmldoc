@@ -8,13 +8,16 @@
     "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development",
     "build:watch": "webpack --mode=development --watch",
+    "build:cdn": "node build/build-cdn.js",
+    "build:production": "node build/build-production.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
+    "test:bundle": "node build/test-bundle.js",
     "lint": "eslint src/**/*.js",
     "lint:fix": "eslint src/**/*.js --fix",
     "serve": "webpack serve --mode=development",
-    "clean": "rimraf dist/*"
+    "clean": "rimraf \"dist\""
   },
   "keywords": [
     "diagram",
@@ -44,7 +47,7 @@
     "html-webpack-plugin": "^5.5.0",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
-    "jsdom": "^26.1.0",
+    "jsdom": "^22.1.0",
     "rimraf": "^5.0.0",
     "style-loader": "^3.3.0",
     "webpack": "^5.88.0",
