@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Microservice Architecture</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .description {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196f3;
+        }
+        #diagram {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: white;
+        }
+        .code-example {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Basic Microservice Architecture Example</h1>
+        
+        <div class="description">
+            <strong>What this example shows:</strong>
+            <ul>
+                <li>A simple microservice architecture with user and order services</li>
+                <li>Database connections for each service</li>
+                <li>An API gateway routing requests to services</li>
+                <li>How to use basic HTML tags to define architecture components</li>
+            </ul>
+        </div>
+
+        <div class="code-example">
+            <strong>HTML Code:</strong><br><br>
+            &lt;api-gateway name="Main Gateway" brand="kong" connects="user-service,order-service" id="gateway"&gt;<br>
+            &lt;/api-gateway&gt;<br><br>
+            
+            &lt;microservice name="User Service" brand="spring-boot" connects="user-db" id="user-service"&gt;<br>
+            &lt;/microservice&gt;<br><br>
+            
+            &lt;microservice name="Order Service" brand="nodejs" connects="order-db" id="order-service"&gt;<br>
+            &lt;/microservice&gt;<br><br>
+            
+            &lt;database name="User Database" brand="postgresql" id="user-db"&gt;<br>
+            &lt;/database&gt;<br><br>
+            
+            &lt;database name="Order Database" brand="mongodb" id="order-db"&gt;<br>
+            &lt;/database&gt;
+        </div>
+
+        <div id="diagram">
+            <!-- Diagram will be rendered here -->
+            <api-gateway name="Main Gateway" brand="kong" connects="user-service,order-service" id="gateway">
+            </api-gateway>
+
+            <microservice name="User Service" brand="spring-boot" connects="user-db" id="user-service">
+            </microservice>
+
+            <microservice name="Order Service" brand="nodejs" connects="order-db" id="order-service">
+            </microservice>
+
+            <database name="User Database" brand="postgresql" id="user-db">
+            </database>
+
+            <database name="Order Database" brand="mongodb" id="order-db">
+            </database>
+        </div>
+    </div>
+
+    <!-- Include the HTML Diagram Library -->
+    <script src="../../dist/html-diagram-library.js"></script>
+    <script>
+        // Initialize the diagram library
+        const diagram = new DiagramLibrary({
+            container: '#diagram',
+            layout: {
+                forceStrength: 0.3,
+                linkDistance: 120,
+                nodeRepulsion: 400,
+                centerForce: 0.1
+            },
+            theme: 'default',
+            interaction: {
+                enableZoom: true,
+                enablePan: true,
+                enableTooltips: true
+            }
+        });
+
+        // Render the diagram from the HTML content
+        diagram.render(document.getElementById('diagram').innerHTML)
+            .then(() => {
+                console.log('Microservice diagram rendered successfully');
+            })
+            .catch(error => {
+                console.error('Error rendering diagram:', error);
+            });
+
+        // Add event listeners for demonstration
+        diagram.on('node:click', (event) => {
+            alert(`Clicked on: ${event.node.label}`);
+        });
+
+        diagram.on('node:hover', (event) => {
+            console.log(`Hovering over: ${event.node.label}`);
+        });
+    </script>
+</body>
+</html>

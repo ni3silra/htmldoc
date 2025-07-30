@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event-Driven Architecture Example</title>
+    <style>
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            padding: 50px;
+            text-align: center;
+            position: relative;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="circuit" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/><path d="M0,10 L20,10 M10,0 L10,20" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23circuit)"/></svg>');
+        }
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 3.5em;
+            font-weight: 800;
+            background: linear-gradient(45deg, #fff, #a8edea, #fed6e3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header p {
+            margin: 20px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.3em;
+            font-weight: 300;
+        }
+        .content {
+            padding: 50px;
+        }
+        .event-flow-description {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        .event-flow-description h2 {
+            margin-top: 0;
+            font-size: 2em;
+            font-weight: 700;
+        }
+        .event-patterns {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        .pattern-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .pattern-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+        }
+        .pattern-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border-color: #007bff;
+        }
+        .pattern-card h3 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 1.4em;
+            font-weight: 700;
+        }
+        .pattern-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+        #diagram {
+            width: 100%;
+            height: 1000px;
+            border: 3px solid #e9ecef;
+            border-radius: 15px;
+            background: radial-gradient(ellipse at center, #fafafa 0%, #f0f2f5 100%);
+            margin: 30px 0;
+            position: relative;
+        }
+        .event-controls {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            border: 2px solid #dee2e6;
+        }
+        .control-section {
+            margin-bottom: 20px;
+        }
+        .control-section h4 {
+            margin: 0 0 15px 0;
+            color: #495057;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        .control-row {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 160px;
+        }
+        .control-group label {
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9em;
+        }
+        button, select, input {
+            padding: 12px 18px;
+            border: 2px solid #ced4da;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        button {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,123,255,0.3);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        button.secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #545b62 100%);
+        }
+        button.success {
+            background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+        }
+        button.warning {
+            background: linear-gradient(135deg, #ffc107 0%, #d39e00 100%);
+            color: #212529;
+        }
+        button.danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        }
+        .event-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .dashboard-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+        }
+        .dashboard-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        .dashboard-value {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: #007bff;
+            margin-bottom: 8px;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+        .dashboard-label {
+            color: #6c757d;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .dashboard-trend {
+            font-size: 0.8em;
+            margin-top: 8px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: 600;
+        }
+        .trend-up {
+            background: #d4edda;
+            color: #155724;
+        }
+        .trend-down {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .trend-stable {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .event-log {
+            background: #1a1a1a;
+            color: #00ff00;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.85em;
+            padding: 20px;
+            border-radius: 8px;
+            height: 200px;
+            overflow-y: auto;
+            margin: 20px 0;
+            border: 2px solid #333;
+        }
+        .event-log::-webkit-scrollbar {
+            width: 8px;
+        }
+        .event-log::-webkit-scrollbar-track {
+            background: #2a2a2a;
+        }
+        .event-log::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 4px;
+        }
+        .event-types {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .event-type-badge {
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.8em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid;
+        }
+        .event-type-badge.user-events {
+            background: #e3f2fd;
+            color: #1565c0;
+            border-color: #bbdefb;
+        }
+        .event-type-badge.order-events {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border-color: #c8e6c9;
+        }
+        .event-type-badge.payment-events {
+            background: #fff3e0;
+            color: #f57c00;
+            border-color: #ffcc02;
+        }
+        .event-type-badge.notification-events {
+            background: #fce4ec;
+            color: #c2185b;
+            border-color: #f8bbd9;
+        }
+        .event-type-badge:hover {
+            transform: scale(1.05);
+        }
+        .event-type-badge.active {
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <h1>⚡ Event-Driven Architecture</h1>
+                <p>Asynchronous, scalable, and resilient system design with event streaming and CQRS patterns</p>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="event-flow-description">
+                <h2>🔄 Event-Driven Flow</h2>
+                <p>This architecture demonstrates how events flow through the system, enabling loose coupling, scalability, and real-time processing. Events are published by producers, routed through message brokers, and consumed by multiple subscribers for different business purposes.</p>
+            </div>
+
+            <div class="event-patterns">
+                <div class="pattern-card">
+                    <span class="pattern-icon">📤</span>
+                    <h3>Event Sourcing</h3>
+                    <p>Store all changes as a sequence of events, enabling complete audit trails and the ability to rebuild state from events.</p>
+                </div>
+                <div class="pattern-card">
+                    <span class="pattern-icon">🔄</span>
+                    <h3>CQRS Pattern</h3>
+                    <p>Separate read and write models to optimize for different access patterns and enable independent scaling.</p>
+                </div>
+                <div class="pattern-card">
+                    <span class="pattern-icon">📊</span>
+                    <h3>Event Streaming</h3>
+                    <p>Real-time processing of continuous event streams for analytics, monitoring, and reactive business logic.</p>
+                </div>
+                <div class="pattern-card">
+                    <span class="pattern-icon">🎯</span>
+                    <h3>Saga Pattern</h3>
+                    <p>Manage distributed transactions across microservices using choreographed or orchestrated sagas.</p>
+                </div>
+            </div>
+
+            <div class="event-types">
+                <div class="event-type-badge user-events active">👤 User Events</div>
+                <div class="event-type-badge order-events">🛒 Order Events</div>
+                <div class="event-type-badge payment-events">💳 Payment Events</div>
+                <div class="event-type-badge notification-events">📧 Notification Events</div>
+            </div>
+
+            <div class="event-controls">
+                <div class="control-section">
+                    <h4>🎛️ Event Simulation Controls</h4>
+                    <div class="control-row">
+                        <div class="control-group">
+                            <label>Event Rate</label>
+                            <input type="range" id="eventRateSlider" min="1" max="100" value="10">
+                            <span id="eventRateValue">10 events/sec</span>
+                        </div>
+                        <div class="control-group">
+                            <label>Event Type</label>
+                            <select id="eventTypeSelect">
+                                <option value="all">All Events</option>
+                                <option value="user">User Events</option>
+                                <option value="order">Order Events</option>
+                                <option value="payment">Payment Events</option>
+                                <option value="notification">Notification Events</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label>Processing Mode</label>
+                            <select id="processingModeSelect">
+                                <option value="realtime">Real-time</option>
+                                <option value="batch">Batch</option>
+                                <option value="hybrid">Hybrid</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-row">
+                        <button id="startEventsBtn" class="success">▶️ Start Events</button>
+                        <button id="stopEventsBtn" class="danger">⏹️ Stop Events</button>
+                        <button id="clearLogBtn" class="secondary">🗑️ Clear Log</button>
+                        <button id="exportEventsBtn">💾 Export Events</button>
+                        <button id="replayEventsBtn" class="warning">🔄 Replay Events</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="event-dashboard">
+                <div class="dashboard-card">
+                    <div class="dashboard-value" id="totalEvents">0</div>
+                    <div class="dashboard-label">Total Events</div>
+                    <div class="dashboard-trend trend-up" id="eventsTrend">↗️ +15%</div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-value" id="eventsPerSecond">0</div>
+                    <div class="dashboard-label">Events/sec</div>
+                    <div class="dashboard-trend trend-stable" id="rateTrend">→ Stable</div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-value" id="activeConsumers">0</div>
+                    <div class="dashboard-label">Active Consumers</div>
+                    <div class="dashboard-trend trend-up" id="consumersTrend">↗️ +3</div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-value" id="processingLatency">0ms</div>
+                    <div class="dashboard-label">Avg Latency</div>
+                    <div class="dashboard-trend trend-down" id="latencyTrend">↘️ -5ms</div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-value" id="errorRate">0%</div>
+                    <div class="dashboard-label">Error Rate</div>
+                    <div class="dashboard-trend trend-down" id="errorTrend">↘️ -0.1%</div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-value" id="throughput">0</div>
+                    <div class="dashboard-label">Throughput MB/s</div>
+                    <div class="dashboard-trend trend-up" id="throughputTrend">↗️ +2.3</div>
+                </div>
+            </div>
+
+            <div class="event-log" id="eventLog">
+                <div style="color: #00ff00;">Event Stream Monitor - Ready</div>
+                <div style="color: #ffff00;">Waiting for events...</div>
+            </div>
+
+            <div id="diagram">
+                <!-- Event Producers -->
+                <microservice name="User Service" brand="nodejs" connects="user-events,user-db" id="user-service"></microservice>
+                <microservice name="Order Service" brand="python" connects="order-events,order-db" id="order-service"></microservice>
+                <microservice name="Payment Service" brand="java" connects="payment-events,payment-db" id="payment-service"></microservice>
+                <microservice name="Inventory Service" brand="spring-boot" connects="inventory-events,inventory-db" id="inventory-service"></microservice>
+                
+                <!-- Event Streams/Topics -->
+                <message-queue name="User Events" brand="kafka" connects="user-event-processor,notification-service,analytics-service" id="user-events"></message-queue>
+                <message-queue name="Order Events" brand="kafka" connects="order-event-processor,inventory-service,analytics-service,saga-orchestrator" id="order-events"></message-queue>
+                <message-queue name="Payment Events" brand="kafka" connects="payment-event-processor,fraud-detection,analytics-service,saga-orchestrator" id="payment-events"></message-queue>
+                <message-queue name="Inventory Events" brand="kafka" connects="inventory-event-processor,order-service,analytics-service" id="inventory-events"></message-queue>
+                <message-queue name="Notification Events" brand="rabbitmq" connects="email-service,sms-service,push-service" id="notification-events"></message-queue>
+                
+                <!-- Event Processors -->
+                <microservice name="User Event Processor" brand="nodejs" connects="user-read-db,user-events-store" id="user-event-processor"></microservice>
+                <microservice name="Order Event Processor" brand="python" connects="order-read-db,order-events-store" id="order-event-processor"></microservice>
+                <microservice name="Payment Event Processor" brand="java" connects="payment-read-db,payment-events-store" id="payment-event-processor"></microservice>
+                <microservice name="Inventory Event Processor" brand="spring-boot" connects="inventory-read-db,inventory-events-store" id="inventory-event-processor"></microservice>
+                
+                <!-- Event Stores (Write Side) -->
+                <database name="User Events Store" brand="postgresql" id="user-events-store"></database>
+                <database name="Order Events Store" brand="postgresql" id="order-events-store"></database>
+                <database name="Payment Events Store" brand="postgresql" id="payment-events-store"></database>
+                <database name="Inventory Events Store" brand="postgresql" id="inventory-events-store"></database>
+                
+                <!-- Command Side Databases -->
+                <database name="User DB" brand="postgresql" id="user-db"></database>
+                <database name="Order DB" brand="mongodb" id="order-db"></database>
+                <database name="Payment DB" brand="postgresql" id="payment-db"></database>
+                <database name="Inventory DB" brand="mysql" id="inventory-db"></database>
+                
+                <!-- Read Side Databases (CQRS) -->
+                <database name="User Read DB" brand="elasticsearch" id="user-read-db"></database>
+                <database name="Order Read DB" brand="mongodb" id="order-read-db"></database>
+                <database name="Payment Read DB" brand="redis" id="payment-read-db"></database>
+                <database name="Inventory Read DB" brand="elasticsearch" id="inventory-read-db"></database>
+                
+                <!-- Saga Orchestrator -->
+                <microservice name="Saga Orchestrator" brand="spring-boot" connects="saga-state-db,order-events,payment-events,inventory-events" id="saga-orchestrator"></microservice>
+                <database name="Saga State DB" brand="postgresql" id="saga-state-db"></database>
+                
+                <!-- Event-Driven Services -->
+                <microservice name="Notification Service" brand="nodejs" connects="notification-events,notification-db" id="notification-service"></microservice>
+                <microservice name="Analytics Service" brand="python" connects="analytics-db,data-warehouse" id="analytics-service"></microservice>
+                <microservice name="Fraud Detection" brand="python" connects="fraud-db,ml-models" id="fraud-detection"></microservice>
+                <microservice name="Recommendation Engine" brand="python" connects="recommendation-db,ml-models" id="recommendation-engine"></microservice>
+                
+                <!-- Supporting Databases -->
+                <database name="Notification DB" brand="mongodb" id="notification-db"></database>
+                <database name="Analytics DB" brand="clickhouse" id="analytics-db"></database>
+                <database name="Data Warehouse" brand="snowflake" id="data-warehouse"></database>
+                <database name="Fraud DB" brand="redis" id="fraud-db"></database>
+                <database name="Recommendation DB" brand="neo4j" id="recommendation-db"></database>
+                <database name="ML Models" brand="tensorflow" id="ml-models"></database>
+                
+                <!-- Notification Channels -->
+                <microservice name="Email Service" brand="sendgrid" id="email-service"></microservice>
+                <microservice name="SMS Service" brand="twilio" id="sms-service"></microservice>
+                <microservice name="Push Service" brand="firebase" id="push-service"></microservice>
+                
+                <!-- Event Monitoring -->
+                <microservice name="Event Monitor" brand="prometheus" connects="monitoring-db,alert-manager" id="event-monitor"></microservice>
+                <database name="Monitoring DB" brand="influxdb" id="monitoring-db"></database>
+                <microservice name="Alert Manager" brand="alertmanager" connects="notification-events" id="alert-manager"></microservice>
+                
+                <!-- Stream Processing -->
+                <microservice name="Stream Processor" brand="kafka-streams" connects="user-events,order-events,payment-events,processed-events" id="stream-processor"></microservice>
+                <message-queue name="Processed Events" brand="kafka" connects="real-time-dashboard,analytics-service" id="processed-events"></message-queue>
+                <microservice name="Real-time Dashboard" brand="react" connects="websocket-server" id="real-time-dashboard"></microservice>
+                <microservice name="WebSocket Server" brand="nodejs" id="websocket-server"></microservice>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include the HTML Diagram Library -->
+    <script src="../../dist/html-diagram-library.js"></script>
+    <script>
+        // Event-driven architecture optimized configuration
+        const diagram = new DiagramLibrary({
+            container: '#diagram',
+            layout: {
+                forceStrength: 0.08,
+                linkDistance: 90,
+                nodeRepulsion: 300,
+                centerForce: 0.05,
+                iterations: 1200
+            },
+            theme: {
+                nodeStyles: {
+                    microservice: {
+                        fill: '#28a745',
+                        stroke: '#1e7e34',
+                        strokeWidth: 2,
+                        fontSize: '9px',
+                        fontWeight: '600',
+                        rx: 6,
+                        ry: 6
+                    },
+                    database: {
+                        fill: '#007bff',
+                        stroke: '#0056b3',
+                        strokeWidth: 2,
+                        fontSize: '9px',
+                        rx: 4,
+                        ry: 4
+                    },
+                    'message-queue': {
+                        fill: '#fd7e14',
+                        stroke: '#e55a00',
+                        strokeWidth: 3,
+                        fontSize: '9px',
+                        fontWeight: '700',
+                        rx: 8,
+                        ry: 8
+                    }
+                },
+                edgeStyles: {
+                    connection: {
+                        stroke: '#495057',
+                        strokeWidth: 1.5,
+                        opacity: 0.7,
+                        markerEnd: 'url(#arrowhead)'
+                    }
+                }
+            },
+            interaction: {
+                enableZoom: true,
+                enablePan: true,
+                enableTooltips: true,
+                zoomExtent: [0.1, 3]
+            },
+            performance: {
+                maxNodes: 200,
+                animationDuration: 2000,
+                renderThrottle: 8,
+                lazyLoading: true
+            }
+        });
+
+        // Event simulation state
+        let eventSimulation = {
+            isRunning: false,
+            eventRate: 10,
+            totalEvents: 0,
+            eventsPerSecond: 0,
+            activeConsumers: 15,
+            processingLatency: 25,
+            errorRate: 0.2,
+            throughput: 5.7,
+            intervalId: null
+        };
+
+        // Initialize diagram
+        diagram.render(document.getElementById('diagram').innerHTML)
+            .then(() => {
+                console.log('Event-driven architecture rendered successfully');
+                updateDashboard();
+                startMetricsSimulation();
+            })
+            .catch(error => {
+                console.error('Error rendering diagram:', error);
+            });
+
+        // Event handlers
+        diagram.on('node:click', (event) => {
+            showEventServiceDetails(event.node);
+        });
+
+        diagram.on('node:hover', (event) => {
+            highlightEventFlow(event.node.id);
+        });
+
+        // Control handlers
+        document.getElementById('eventRateSlider').addEventListener('input', (e) => {
+            eventSimulation.eventRate = parseInt(e.target.value);
+            document.getElementById('eventRateValue').textContent = eventSimulation.eventRate + ' events/sec';
+        });
+
+        document.getElementById('startEventsBtn').addEventListener('click', startEventSimulation);
+        document.getElementById('stopEventsBtn').addEventListener('click', stopEventSimulation);
+        document.getElementById('clearLogBtn').addEventListener('click', clearEventLog);
+        document.getElementById('exportEventsBtn').addEventListener('click', exportEventData);
+        document.getElementById('replayEventsBtn').addEventListener('click', replayEvents);
+
+        // Event type badges
+        document.querySelectorAll('.event-type-badge').forEach(badge => {
+            badge.addEventListener('click', (e) => {
+                document.querySelectorAll('.event-type-badge').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                filterEventsByType(e.target.textContent.split(' ')[1].toLowerCase());
+            });
+        });
+
+        // Event simulation functions
+        function startEventSimulation() {
+            if (eventSimulation.isRunning) return;
+            
+            eventSimulation.isRunning = true;
+            document.getElementById('startEventsBtn').disabled = true;
+            document.getElementById('stopEventsBtn').disabled = false;
+            
+            logEvent('🚀 Event simulation started', 'system');
+            
+            eventSimulation.intervalId = setInterval(() => {
+                generateRandomEvent();
+                updateDashboard();
+            }, 1000 / eventSimulation.eventRate);
+        }
+
+        function stopEventSimulation() {
+            if (!eventSimulation.isRunning) return;
+            
+            eventSimulation.isRunning = false;
+            document.getElementById('startEventsBtn').disabled = false;
+            document.getElementById('stopEventsBtn').disabled = true;
+            
+            if (eventSimulation.intervalId) {
+                clearInterval(eventSimulation.intervalId);
+                eventSimulation.intervalId = null;
+            }
+            
+            logEvent('⏹️ Event simulation stopped', 'system');
+        }
+
+        function generateRandomEvent() {
+            const eventTypes = ['user', 'order', 'payment', 'inventory', 'notification'];
+            const eventType = eventTypes[Math.floor(Math.random() * eventTypes.length)];
+            
+            const events = {
+                user: [
+                    'UserRegistered',
+                    'UserLoggedIn',
+                    'UserProfileUpdated',
+                    'UserLoggedOut'
+                ],
+                order: [
+                    'OrderCreated',
+                    'OrderConfirmed',
+                    'OrderShipped',
+                    'OrderDelivered',
+                    'OrderCancelled'
+                ],
+                payment: [
+                    'PaymentInitiated',
+                    'PaymentProcessed',
+                    'PaymentFailed',
+                    'RefundProcessed'
+                ],
+                inventory: [
+                    'InventoryUpdated',
+                    'StockLevelLow',
+                    'ProductRestocked',
+                    'ProductOutOfStock'
+                ],
+                notification: [
+                    'EmailSent',
+                    'SMSSent',
+                    'PushNotificationSent'
+                ]
+            };
+            
+            const eventName = events[eventType][Math.floor(Math.random() * events[eventType].length)];
+            const eventId = generateEventId();
+            
+            eventSimulation.totalEvents++;
+            eventSimulation.eventsPerSecond = Math.min(eventSimulation.eventRate, eventSimulation.eventsPerSecond + 1);
+            
+            logEvent(`📤 ${eventName} [${eventId}]`, eventType);
+            
+            // Simulate event processing
+            setTimeout(() => {
+                logEvent(`✅ ${eventName} processed [${eventId}]`, 'processed');
+            }, Math.random() * 500 + 100);
+            
+            // Animate event flow in diagram
+            animateEventFlow(eventType);
+        }
+
+        function generateEventId() {
+            return Math.random().toString(36).substr(2, 9).toUpperCase();
+        }
+
+        function logEvent(message, type) {
+            const eventLog = document.getElementById('eventLog');
+            const timestamp = new Date().toLocaleTimeString();
+            const colors = {
+                system: '#ffff00',
+                user: '#00bfff',
+                order: '#00ff00',
+                payment: '#ffa500',
+                inventory: '#ff69b4',
+                notification: '#da70d6',
+                processed: '#90ee90',
+                error: '#ff6b6b'
+            };
+            
+            const color = colors[type] || '#ffffff';
+            const logEntry = document.createElement('div');
+            logEntry.style.color = color;
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            
+            eventLog.appendChild(logEntry);
+            eventLog.scrollTop = eventLog.scrollHeight;
+            
+            // Keep only last 100 entries
+            while (eventLog.children.length > 100) {
+                eventLog.removeChild(eventLog.firstChild);
+            }
+        }
+
+        function clearEventLog() {
+            const eventLog = document.getElementById('eventLog');
+            eventLog.innerHTML = '<div style="color: #00ff00;">Event Stream Monitor - Ready</div><div style="color: #ffff00;">Log cleared...</div>';
+        }
+
+        function updateDashboard() {
+            document.getElementById('totalEvents').textContent = eventSimulation.totalEvents.toLocaleString();
+            document.getElementById('eventsPerSecond').textContent = eventSimulation.eventsPerSecond;
+            document.getElementById('activeConsumers').textContent = eventSimulation.activeConsumers;
+            document.getElementById('processingLatency').textContent = eventSimulation.processingLatency + 'ms';
+            document.getElementById('errorRate').textContent = eventSimulation.errorRate.toFixed(1) + '%';
+            document.getElementById('throughput').textContent = eventSimulation.throughput.toFixed(1);
+        }
+
+        function startMetricsSimulation() {
+            setInterval(() => {
+                // Simulate realistic metric fluctuations
+                eventSimulation.eventsPerSecond = Math.max(0, eventSimulation.eventsPerSecond + (Math.random() - 0.5) * 2);
+                eventSimulation.activeConsumers = Math.max(10, eventSimulation.activeConsumers + Math.floor((Math.random() - 0.5) * 2));
+                eventSimulation.processingLatency = Math.max(10, eventSimulation.processingLatency + (Math.random() - 0.5) * 10);
+                eventSimulation.errorRate = Math.max(0, Math.min(5, eventSimulation.errorRate + (Math.random() - 0.5) * 0.2));
+                eventSimulation.throughput = Math.max(0, eventSimulation.throughput + (Math.random() - 0.5) * 1);
+                
+                if (!eventSimulation.isRunning) {
+                    eventSimulation.eventsPerSecond = Math.max(0, eventSimulation.eventsPerSecond - 0.5);
+                }
+                
+                updateDashboard();
+            }, 2000);
+        }
+
+        function showEventServiceDetails(node) {
+            const serviceDetails = getEventServiceDetails(node.id);
+            showServiceModal(node.label, serviceDetails);
+        }
+
+        function getEventServiceDetails(serviceId) {
+            const details = {
+                'user-events': {
+                    type: 'Event Stream',
+                    technology: 'Apache Kafka',
+                    partitions: 12,
+                    replication: 3,
+                    retention: '7 days',
+                    throughput: '10K events/sec',
+                    consumers: 5
+                },
+                'saga-orchestrator': {
+                    type: 'Saga Orchestrator',
+                    technology: 'Spring Boot',
+                    activeTransactions: 150,
+                    completionRate: '99.2%',
+                    avgDuration: '2.3s',
+                    compensations: 3
+                },
+                'stream-processor': {
+                    type: 'Stream Processor',
+                    technology: 'Kafka Streams',
+                    processingRate: '50K events/sec',
+                    latency: '15ms p99',
+                    windows: 'Tumbling 1min',
+                    state: 'Running'
+                }
+            };
+            return details[serviceId] || {
+                type: 'Event Service',
+                status: 'Active',
+                events: 'Processing'
+            };
+        }
+
+        function showServiceModal(title, details) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.7);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+            `;
+            
+            const content = document.createElement('div');
+            content.style.cssText = `
+                background: white;
+                padding: 40px;
+                border-radius: 15px;
+                max-width: 600px;
+                width: 90%;
+                box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            `;
+            
+            content.innerHTML = `
+                <h2 style="margin-top: 0; color: #2c3e50; font-size: 1.8em;">${title}</h2>
+                <div style="margin: 25px 0;">
+                    ${Object.entries(details).map(([key, value]) => 
+                        `<div style="margin: 15px 0; padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                            <strong style="color: #495057;">${key}:</strong> 
+                            <span style="color: #007bff;">${value}</span>
+                        </div>`
+                    ).join('')}
+                </div>
+                <button onclick="this.closest('.modal').remove()" style="
+                    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+                    color: white;
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    float: right;
+                    font-weight: 600;
+                ">Close</button>
+            `;
+            
+            modal.className = 'modal';
+            modal.appendChild(content);
+            modal.onclick = (e) => {
+                if (e.target === modal) modal.remove();
+            };
+            
+            document.body.appendChild(modal);
+        }
+
+        function animateEventFlow(eventType) {
+            // Highlight the event flow path in the diagram
+            const eventPaths = {
+                user: ['user-service', 'user-events', 'user-event-processor'],
+                order: ['order-service', 'order-events', 'order-event-processor', 'saga-orchestrator'],
+                payment: ['payment-service', 'payment-events', 'payment-event-processor', 'fraud-detection'],
+                inventory: ['inventory-service', 'inventory-events', 'inventory-event-processor']
+            };
+            
+            const path = eventPaths[eventType];
+            if (path) {
+                diagram.animatePath(path, {
+                    duration: 1000,
+                    color: '#ff6b6b'
+                });
+            }
+        }
+
+        function highlightEventFlow(serviceId) {
+            diagram.highlightConnections(serviceId, {
+                highlightColor: '#007bff',
+                opacity: 0.8
+            });
+        }
+
+        function filterEventsByType(eventType) {
+            console.log(`Filtering events by type: ${eventType}`);
+            // Implementation would filter the diagram view
+        }
+
+        function exportEventData() {
+            const eventData = {
+                totalEvents: eventSimulation.totalEvents,
+                eventsPerSecond: eventSimulation.eventsPerSecond,
+                activeConsumers: eventSimulation.activeConsumers,
+                processingLatency: eventSimulation.processingLatency,
+                errorRate: eventSimulation.errorRate,
+                throughput: eventSimulation.throughput,
+                timestamp: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(eventData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `event-metrics-${Date.now()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            logEvent('📊 Event data exported', 'system');
+        }
+
+        function replayEvents() {
+            logEvent('🔄 Replaying events from event store...', 'system');
+            
+            // Simulate event replay
+            let replayCount = 0;
+            const replayInterval = setInterval(() => {
+                if (replayCount < 10) {
+                    logEvent(`🔄 Replaying event ${replayCount + 1}/10`, 'processed');
+                    replayCount++;
+                } else {
+                    clearInterval(replayInterval);
+                    logEvent('✅ Event replay completed', 'system');
+                }
+            }, 200);
+        }
+
+        // Performance monitoring
+        setInterval(() => {
+            const memoryInfo = performance.memory;
+            if (memoryInfo && memoryInfo.usedJSHeapSize > 150 * 1024 * 1024) {
+                logEvent('⚠️ High memory usage detected', 'error');
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

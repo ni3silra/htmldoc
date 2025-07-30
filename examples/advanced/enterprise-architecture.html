@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Architecture Example</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        .content {
+            padding: 30px;
+        }
+        .description {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 5px solid #3498db;
+        }
+        .architecture-layers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .layer {
+            background: #fff;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.2s;
+        }
+        .layer:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .layer h3 {
+            color: #2c3e50;
+            margin-top: 0;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        #diagram {
+            width: 100%;
+            height: 800px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            background: #fafafa;
+            margin: 20px 0;
+        }
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .control-group label {
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9em;
+        }
+        button, select, input[type="range"] {
+            padding: 8px 16px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        button:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+        }
+        button.active {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Enterprise Architecture</h1>
+            <p>Complex multi-tier system with microservices, data layers, and external integrations</p>
+        </div>
+        
+        <div class="content">
+            <div class="description">
+                <h3>🏢 Enterprise-Scale Architecture</h3>
+                <p>This example demonstrates a comprehensive enterprise architecture with multiple tiers, redundancy, caching strategies, message queues, and external service integrations. It showcases how complex systems can be visualized using the HTML Diagram Library.</p>
+            </div>
+
+            <div class="architecture-layers">
+                <div class="layer">
+                    <h3>🌐 Presentation Layer</h3>
+                    <ul>
+                        <li>Load-balanced web applications</li>
+                        <li>CDN for static content</li>
+                        <li>API Gateway for routing</li>
+                    </ul>
+                </div>
+                <div class="layer">
+                    <h3>⚙️ Business Logic Layer</h3>
+                    <ul>
+                        <li>Microservices architecture</li>
+                        <li>Service mesh communication</li>
+                        <li>Event-driven processing</li>
+                    </ul>
+                </div>
+                <div class="layer">
+                    <h3>💾 Data Layer</h3>
+                    <ul>
+                        <li>Multiple database types</li>
+                        <li>Caching strategies</li>
+                        <li>Data replication</li>
+                    </ul>
+                </div>
+                <div class="layer">
+                    <h3>🔗 Integration Layer</h3>
+                    <ul>
+                        <li>Message queues</li>
+                        <li>External APIs</li>
+                        <li>Third-party services</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>Layout Algorithm</label>
+                    <select id="layoutSelect">
+                        <option value="force">Force-Directed</option>
+                        <option value="hierarchical">Hierarchical</option>
+                        <option value="circular">Circular</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Node Spacing</label>
+                    <input type="range" id="spacingSlider" min="50" max="200" value="120">
+                </div>
+                <div class="control-group">
+                    <label>Actions</label>
+                    <div style="display: flex; gap: 10px;">
+                        <button id="exportBtn">Export SVG</button>
+                        <button id="resetBtn">Reset View</button>
+                        <button id="fitBtn">Fit to Screen</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="nodeCount">0</div>
+                    <div class="stat-label">Components</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="connectionCount">0</div>
+                    <div class="stat-label">Connections</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="renderTime">0ms</div>
+                    <div class="stat-label">Render Time</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="layoutTime">0ms</div>
+                    <div class="stat-label">Layout Time</div>
+                </div>
+            </div>
+
+            <div id="diagram">
+                <!-- Load Balancers and CDN -->
+                <load-balancer name="External Load Balancer" brand="nginx" connects="web-app-1,web-app-2" id="external-lb"></load-balancer>
+                
+                <!-- Web Applications -->
+                <microservice name="Web App 1" brand="react" connects="api-gateway-1,cdn" id="web-app-1"></microservice>
+                <microservice name="Web App 2" brand="react" connects="api-gateway-2,cdn" id="web-app-2"></microservice>
+                
+                <!-- CDN -->
+                <cache name="CDN" brand="cloudflare" id="cdn"></cache>
+                
+                <!-- API Gateways -->
+                <api-gateway name="API Gateway 1" brand="kong" connects="auth-service,user-service,order-service,payment-service" id="api-gateway-1"></api-gateway>
+                <api-gateway name="API Gateway 2" brand="kong" connects="auth-service,user-service,order-service,payment-service" id="api-gateway-2"></api-gateway>
+                
+                <!-- Core Services -->
+                <microservice name="Auth Service" brand="spring-boot" connects="auth-db,auth-cache,user-queue" id="auth-service"></microservice>
+                <microservice name="User Service" brand="nodejs" connects="user-db,user-cache,user-queue" id="user-service"></microservice>
+                <microservice name="Order Service" brand="python" connects="order-db,order-cache,order-queue,payment-queue" id="order-service"></microservice>
+                <microservice name="Payment Service" brand="java" connects="payment-db,payment-queue,external-payment-api" id="payment-service"></microservice>
+                <microservice name="Notification Service" brand="nodejs" connects="notification-queue,email-service,sms-service" id="notification-service"></microservice>
+                <microservice name="Analytics Service" brand="python" connects="analytics-db,data-warehouse,analytics-queue" id="analytics-service"></microservice>
+                
+                <!-- Databases -->
+                <database name="Auth Database" brand="postgresql" connects="auth-db-replica" id="auth-db"></database>
+                <database name="Auth DB Replica" brand="postgresql" id="auth-db-replica"></database>
+                <database name="User Database" brand="mysql" connects="user-db-replica" id="user-db"></database>
+                <database name="User DB Replica" brand="mysql" id="user-db-replica"></database>
+                <database name="Order Database" brand="mongodb" connects="order-db-replica" id="order-db"></database>
+                <database name="Order DB Replica" brand="mongodb" id="order-db-replica"></database>
+                <database name="Payment Database" brand="postgresql" id="payment-db"></database>
+                <database name="Analytics Database" brand="elasticsearch" id="analytics-db"></database>
+                <database name="Data Warehouse" brand="snowflake" id="data-warehouse"></database>
+                
+                <!-- Caches -->
+                <cache name="Auth Cache" brand="redis" connects="auth-cache-replica" id="auth-cache"></cache>
+                <cache name="Auth Cache Replica" brand="redis" id="auth-cache-replica"></cache>
+                <cache name="User Cache" brand="redis" id="user-cache"></cache>
+                <cache name="Order Cache" brand="memcached" id="order-cache"></cache>
+                
+                <!-- Message Queues -->
+                <message-queue name="User Events" brand="kafka" id="user-queue"></message-queue>
+                <message-queue name="Order Events" brand="kafka" id="order-queue"></message-queue>
+                <message-queue name="Payment Events" brand="rabbitmq" id="payment-queue"></message-queue>
+                <message-queue name="Notifications" brand="rabbitmq" id="notification-queue"></message-queue>
+                <message-queue name="Analytics Events" brand="kafka" id="analytics-queue"></message-queue>
+                
+                <!-- External Services -->
+                <microservice name="External Payment API" brand="stripe" id="external-payment-api"></microservice>
+                <microservice name="Email Service" brand="sendgrid" id="email-service"></microservice>
+                <microservice name="SMS Service" brand="twilio" id="sms-service"></microservice>
+                
+                <!-- Monitoring and Logging -->
+                <microservice name="Monitoring Service" brand="prometheus" connects="metrics-db,alert-manager" id="monitoring-service"></microservice>
+                <database name="Metrics Database" brand="influxdb" id="metrics-db"></database>
+                <microservice name="Alert Manager" brand="alertmanager" connects="notification-queue" id="alert-manager"></microservice>
+                <microservice name="Log Aggregator" brand="elasticsearch" connects="log-db" id="log-aggregator"></microservice>
+                <database name="Log Database" brand="elasticsearch" id="log-db"></database>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include the HTML Diagram Library -->
+    <script src="../../dist/html-diagram-library.js"></script>
+    <script>
+        // Initialize the diagram with enterprise-optimized settings
+        const diagram = new DiagramLibrary({
+            container: '#diagram',
+            layout: {
+                forceStrength: 0.15,
+                linkDistance: 120,
+                nodeRepulsion: 400,
+                centerForce: 0.1,
+                iterations: 800
+            },
+            theme: {
+                nodeStyles: {
+                    microservice: {
+                        fill: '#28a745',
+                        stroke: '#1e7e34',
+                        strokeWidth: 2,
+                        fontSize: '11px',
+                        fontWeight: 'bold'
+                    },
+                    database: {
+                        fill: '#007bff',
+                        stroke: '#0056b3',
+                        strokeWidth: 2,
+                        fontSize: '11px'
+                    },
+                    cache: {
+                        fill: '#fd7e14',
+                        stroke: '#e55a00',
+                        strokeWidth: 2,
+                        fontSize: '11px'
+                    },
+                    'api-gateway': {
+                        fill: '#6f42c1',
+                        stroke: '#5a2d91',
+                        strokeWidth: 2,
+                        fontSize: '11px',
+                        fontWeight: 'bold'
+                    },
+                    'load-balancer': {
+                        fill: '#ffc107',
+                        stroke: '#d39e00',
+                        strokeWidth: 2,
+                        fontSize: '11px',
+                        fontWeight: 'bold'
+                    },
+                    'message-queue': {
+                        fill: '#6c757d',
+                        stroke: '#545b62',
+                        strokeWidth: 2,
+                        fontSize: '11px'
+                    }
+                },
+                edgeStyles: {
+                    connection: {
+                        stroke: '#495057',
+                        strokeWidth: 1.5,
+                        opacity: 0.7
+                    }
+                }
+            },
+            interaction: {
+                enableZoom: true,
+                enablePan: true,
+                enableTooltips: true,
+                zoomExtent: [0.1, 3]
+            },
+            performance: {
+                maxNodes: 100,
+                animationDuration: 1200,
+                renderThrottle: 16,
+                lazyLoading: true
+            }
+        });
+
+        let renderStartTime;
+        let layoutStartTime;
+
+        // Render the diagram
+        renderStartTime = performance.now();
+        diagram.render(document.getElementById('diagram').innerHTML)
+            .then(() => {
+                const renderTime = Math.round(performance.now() - renderStartTime);
+                document.getElementById('renderTime').textContent = renderTime + 'ms';
+                console.log('Enterprise architecture diagram rendered successfully');
+                updateStats();
+            })
+            .catch(error => {
+                console.error('Error rendering diagram:', error);
+            });
+
+        // Event handlers
+        diagram.on('layout:start', () => {
+            layoutStartTime = performance.now();
+        });
+
+        diagram.on('layout:complete', (event) => {
+            const layoutTime = Math.round(performance.now() - layoutStartTime);
+            document.getElementById('layoutTime').textContent = layoutTime + 'ms';
+            console.log(`Layout completed in ${layoutTime}ms with ${event.nodeCount} nodes`);
+        });
+
+        diagram.on('node:click', (event) => {
+            const nodeInfo = getNodeInfo(event.node.id);
+            showNodeDetails(event.node.label, nodeInfo);
+        });
+
+        diagram.on('node:hover', (event) => {
+            console.log(`Hovering over: ${event.node.label} (${event.node.type})`);
+        });
+
+        // Control handlers
+        document.getElementById('layoutSelect').addEventListener('change', (e) => {
+            diagram.setLayoutAlgorithm(e.target.value);
+            diagram.recalculateLayout();
+        });
+
+        document.getElementById('spacingSlider').addEventListener('input', (e) => {
+            diagram.updateLayoutConfig({
+                linkDistance: parseInt(e.target.value),
+                nodeRepulsion: parseInt(e.target.value) * 3
+            });
+            diagram.recalculateLayout();
+        });
+
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            const svgData = diagram.exportSVG();
+            downloadSVG(svgData, 'enterprise-architecture.svg');
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            diagram.resetView();
+        });
+
+        document.getElementById('fitBtn').addEventListener('click', () => {
+            diagram.fitToScreen();
+        });
+
+        // Helper functions
+        function updateStats() {
+            const stats = diagram.getStats();
+            document.getElementById('nodeCount').textContent = stats.nodeCount;
+            document.getElementById('connectionCount').textContent = stats.edgeCount;
+        }
+
+        function getNodeInfo(nodeId) {
+            const nodeDescriptions = {
+                'external-lb': 'High-availability NGINX load balancer distributing traffic across web application instances',
+                'web-app-1': 'React-based web application instance 1 serving user interface',
+                'web-app-2': 'React-based web application instance 2 providing redundancy',
+                'cdn': 'Cloudflare CDN for global content delivery and caching',
+                'api-gateway-1': 'Kong API Gateway instance handling authentication, routing, and rate limiting',
+                'api-gateway-2': 'Kong API Gateway backup instance for high availability',
+                'auth-service': 'Spring Boot authentication service managing user sessions and JWT tokens',
+                'user-service': 'Node.js user management service handling profiles and preferences',
+                'order-service': 'Python order processing service managing e-commerce transactions',
+                'payment-service': 'Java payment service integrating with external payment providers',
+                'notification-service': 'Node.js notification service handling email and SMS communications',
+                'analytics-service': 'Python analytics service processing business intelligence data',
+                'monitoring-service': 'Prometheus monitoring service collecting system metrics',
+                'log-aggregator': 'Elasticsearch log aggregation service for centralized logging'
+            };
+            return nodeDescriptions[nodeId] || 'Enterprise system component';
+        }
+
+        function showNodeDetails(nodeName, description) {
+            alert(`${nodeName}\n\n${description}\n\nClick OK to continue exploring the architecture.`);
+        }
+
+        function downloadSVG(svgData, filename) {
+            const blob = new Blob([svgData], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Performance monitoring
+        setInterval(() => {
+            const memoryInfo = performance.memory;
+            if (memoryInfo) {
+                console.log('Memory usage:', {
+                    used: Math.round(memoryInfo.usedJSHeapSize / 1024 / 1024) + 'MB',
+                    total: Math.round(memoryInfo.totalJSHeapSize / 1024 / 1024) + 'MB'
+                });
+            }
+        }, 10000);
+    </script>
+</body>
+</html>

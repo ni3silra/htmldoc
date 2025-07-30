@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Gateway Architecture Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .description {
+            background: #f3e5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #9c27b0;
+        }
+        #diagram {
+            width: 100%;
+            height: 700px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: white;
+        }
+        .code-example {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        .architecture-notes {
+            background: #e1f5fe;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #03a9f4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>API Gateway Architecture Example</h1>
+        
+        <div class="description">
+            <strong>What this example illustrates:</strong>
+            <ul>
+                <li>API Gateway as the single entry point for client requests</li>
+                <li>Load balancer distributing traffic to multiple gateway instances</li>
+                <li>Multiple backend microservices handling different domains</li>
+                <li>Service-specific databases and caching layers</li>
+            </ul>
+        </div>
+
+        <div class="architecture-notes">
+            <strong>Architecture Benefits:</strong>
+            <ul>
+                <li><strong>Centralized Routing:</strong> Single point for request routing and load balancing</li>
+                <li><strong>Security:</strong> Authentication and authorization at the gateway level</li>
+                <li><strong>Monitoring:</strong> Centralized logging and metrics collection</li>
+                <li><strong>Rate Limiting:</strong> Traffic control and API throttling</li>
+            </ul>
+        </div>
+
+        <div class="code-example">
+            <strong>HTML Code:</strong><br><br>
+            &lt;load-balancer name="External LB" brand="nginx" connects="api-gateway-1,api-gateway-2" id="external-lb"&gt;<br>
+            &lt;/load-balancer&gt;<br><br>
+            
+            &lt;api-gateway name="API Gateway 1" brand="kong" connects="auth-service,user-service,order-service" id="api-gateway-1"&gt;<br>
+            &lt;/api-gateway&gt;<br><br>
+            
+            &lt;api-gateway name="API Gateway 2" brand="kong" connects="auth-service,user-service,order-service" id="api-gateway-2"&gt;<br>
+            &lt;/api-gateway&gt;<br><br>
+            
+            &lt;microservice name="Auth Service" brand="spring-boot" connects="auth-db,auth-cache" id="auth-service"&gt;<br>
+            &lt;/microservice&gt;<br><br>
+            
+            &lt;microservice name="User Service" brand="nodejs" connects="user-db" id="user-service"&gt;<br>
+            &lt;/microservice&gt;<br><br>
+            
+            &lt;microservice name="Order Service" brand="python" connects="order-db,order-queue" id="order-service"&gt;<br>
+            &lt;/microservice&gt;<br><br>
+            
+            &lt;database name="Auth Database" brand="postgresql" id="auth-db"&gt;<br>
+            &lt;/database&gt;<br><br>
+            
+            &lt;cache name="Auth Cache" brand="redis" id="auth-cache"&gt;<br>
+            &lt;/cache&gt;<br><br>
+            
+            &lt;database name="User Database" brand="mysql" id="user-db"&gt;<br>
+            &lt;/database&gt;<br><br>
+            
+            &lt;database name="Order Database" brand="mongodb" id="order-db"&gt;<br>
+            &lt;/database&gt;<br><br>
+            
+            &lt;message-queue name="Order Queue" brand="rabbitmq" id="order-queue"&gt;<br>
+            &lt;/message-queue&gt;
+        </div>
+
+        <div id="diagram">
+            <!-- Diagram will be rendered here -->
+            <load-balancer name="External LB" brand="nginx" connects="api-gateway-1,api-gateway-2" id="external-lb">
+            </load-balancer>
+
+            <api-gateway name="API Gateway 1" brand="kong" connects="auth-service,user-service,order-service" id="api-gateway-1">
+            </api-gateway>
+
+            <api-gateway name="API Gateway 2" brand="kong" connects="auth-service,user-service,order-service" id="api-gateway-2">
+            </api-gateway>
+
+            <microservice name="Auth Service" brand="spring-boot" connects="auth-db,auth-cache" id="auth-service">
+            </microservice>
+
+            <microservice name="User Service" brand="nodejs" connects="user-db" id="user-service">
+            </microservice>
+
+            <microservice name="Order Service" brand="python" connects="order-db,order-queue" id="order-service">
+            </microservice>
+
+            <database name="Auth Database" brand="postgresql" id="auth-db">
+            </database>
+
+            <cache name="Auth Cache" brand="redis" id="auth-cache">
+            </cache>
+
+            <database name="User Database" brand="mysql" id="user-db">
+            </database>
+
+            <database name="Order Database" brand="mongodb" id="order-db">
+            </database>
+
+            <message-queue name="Order Queue" brand="rabbitmq" id="order-queue">
+            </message-queue>
+        </div>
+    </div>
+
+    <!-- Include the HTML Diagram Library -->
+    <script src="../../dist/html-diagram-library.js"></script>
+    <script>
+        // Initialize the diagram library with optimized settings for complex diagrams
+        const diagram = new DiagramLibrary({
+            container: '#diagram',
+            layout: {
+                forceStrength: 0.2,
+                linkDistance: 100,
+                nodeRepulsion: 300,
+                centerForce: 0.15,
+                iterations: 500
+            },
+            theme: {
+                nodeStyles: {
+                    'api-gateway': {
+                        fill: '#9C27B0',
+                        stroke: '#6A1B9A',
+                        strokeWidth: 2
+                    },
+                    'load-balancer': {
+                        fill: '#FF9800',
+                        stroke: '#F57C00',
+                        strokeWidth: 2
+                    },
+                    microservice: {
+                        fill: '#4CAF50',
+                        stroke: '#2E7D32',
+                        strokeWidth: 2
+                    },
+                    database: {
+                        fill: '#2196F3',
+                        stroke: '#1565C0',
+                        strokeWidth: 2
+                    },
+                    cache: {
+                        fill: '#FF5722',
+                        stroke: '#D84315',
+                        strokeWidth: 2
+                    },
+                    'message-queue': {
+                        fill: '#795548',
+                        stroke: '#5D4037',
+                        strokeWidth: 2
+                    }
+                }
+            },
+            interaction: {
+                enableZoom: true,
+                enablePan: true,
+                enableTooltips: true
+            },
+            performance: {
+                animationDuration: 1000,
+                renderThrottle: 16
+            }
+        });
+
+        // Render the diagram
+        diagram.render(document.getElementById('diagram').innerHTML)
+            .then(() => {
+                console.log('API Gateway architecture diagram rendered successfully');
+            })
+            .catch(error => {
+                console.error('Error rendering diagram:', error);
+            });
+
+        // Add detailed interaction handlers
+        diagram.on('node:click', (event) => {
+            const nodeDescriptions = {
+                'external-lb': 'NGINX Load Balancer - Distributes incoming traffic across multiple API Gateway instances for high availability',
+                'api-gateway-1': 'Kong API Gateway Instance 1 - Handles authentication, routing, rate limiting, and request/response transformation',
+                'api-gateway-2': 'Kong API Gateway Instance 2 - Backup instance providing redundancy and load distribution',
+                'auth-service': 'Authentication Service - Handles user login, JWT token generation, and authorization checks',
+                'user-service': 'User Management Service - Manages user profiles, preferences, and account information',
+                'order-service': 'Order Processing Service - Handles order creation, payment processing, and fulfillment',
+                'auth-db': 'Authentication Database - Stores user credentials, roles, and authentication tokens',
+                'auth-cache': 'Authentication Cache - Redis cache for session data and frequently accessed auth information',
+                'user-db': 'User Database - MySQL database storing user profiles and account information',
+                'order-db': 'Order Database - MongoDB storing order documents and transaction history',
+                'order-queue': 'Order Message Queue - RabbitMQ handling asynchronous order processing and notifications'
+            };
+            
+            const description = nodeDescriptions[event.node.id] || 'System component';
+            alert(`${event.node.label}\n\n${description}`);
+        });
+
+        diagram.on('node:hover', (event) => {
+            console.log(`Hovering over: ${event.node.label} (${event.node.type})`);
+        });
+
+        diagram.on('layout:complete', (event) => {
+            console.log(`Complex layout completed in ${event.duration}ms with ${event.nodeCount} nodes`);
+        });
+    </script>
+</body>
+</html>
