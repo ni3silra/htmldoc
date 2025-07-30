@@ -169,7 +169,12 @@
   - Create `build/test-bundle.js` script to ensure single-file bundle works independently
   - _Requirements: 4.1, 7.2_
 
-- [ ] 16. Create comprehensive README with HTML-only usage instructions
+- [x] 16. Create comprehensive README with HTML-only usage instructions
+
+
+
+
+
   - Create `README.md` with simple usage instructions requiring only HTML and script tag inclusion
   - Document browser compatibility section with no installation prerequisites needed
   - Create step-by-step quick start guide from CDN script inclusion to first diagram creation

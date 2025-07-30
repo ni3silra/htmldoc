@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>With Configuration - HTML Diagram Library</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        .description {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196f3;
+        }
+        #diagram {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: #fafafa;
+            margin: 20px 0;
+        }
+        .code-section {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        .config-section {
+            background: #fff8e1;
+            border: 1px solid #ffcc02;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #ff9800;
+        }
+        .config-section h3 {
+            margin-top: 0;
+            color: #e65100;
+        }
+        .controls {
+            background: #f3e5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #9c27b0;
+        }
+        .control-group {
+            margin: 10px 0;
+        }
+        .control-group label {
+            display: inline-block;
+            width: 150px;
+            font-weight: bold;
+        }
+        .control-group input, .control-group select {
+            width: 200px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            background: #2196f3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #1976d2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Configuration Example</h1>
+        <div class="subtitle">Learn how to customize layout, theme, and interaction settings</div>
+        
+        <div class="description">
+            <strong>What you'll learn:</strong>
+            <ul>
+                <li>How to configure layout parameters (force strength, distances, etc.)</li>
+                <li>How to customize interaction settings (zoom, pan, tooltips)</li>
+                <li>How to apply different themes and styling</li>
+                <li>How to handle performance settings for larger diagrams</li>
+                <li>Live controls to experiment with different settings</li>
+            </ul>
+        </div>
+
+        <div class="config-section">
+            <h3>Configuration Options Explained</h3>
+            <p>The HTML Diagram Library accepts a configuration object with these main sections:</p>
+            <ul>
+                <li><strong>layout:</strong> Controls how elements are positioned and connected</li>
+                <li><strong>interaction:</strong> Enables/disables user interaction features</li>
+                <li><strong>theme:</strong> Controls visual appearance and styling</li>
+                <li><strong>performance:</strong> Optimizes rendering for different diagram sizes</li>
+            </ul>
+        </div>
+
+        <div class="controls">
+            <h3>Live Configuration Controls</h3>
+            <p>Adjust these settings and click "Update Diagram" to see the changes:</p>
+            
+            <div class="control-group">
+                <label>Force Strength:</label>
+                <input type="range" id="forceStrength" min="0.1" max="1.0" step="0.1" value="0.3">
+                <span id="forceStrengthValue">0.3</span>
+            </div>
+            
+            <div class="control-group">
+                <label>Link Distance:</label>
+                <input type="range" id="linkDistance" min="50" max="300" step="10" value="120">
+                <span id="linkDistanceValue">120</span>
+            </div>
+            
+            <div class="control-group">
+                <label>Node Repulsion:</label>
+                <input type="range" id="nodeRepulsion" min="100" max="800" step="50" value="400">
+                <span id="nodeRepulsionValue">400</span>
+            </div>
+            
+            <div class="control-group">
+                <label>Center Force:</label>
+                <input type="range" id="centerForce" min="0" max="0.5" step="0.05" value="0.1">
+                <span id="centerForceValue">0.1</span>
+            </div>
+            
+            <div class="control-group">
+                <label>Enable Zoom:</label>
+                <input type="checkbox" id="enableZoom" checked>
+            </div>
+            
+            <div class="control-group">
+                <label>Enable Pan:</label>
+                <input type="checkbox" id="enablePan" checked>
+            </div>
+            
+            <div class="control-group">
+                <label>Enable Tooltips:</label>
+                <input type="checkbox" id="enableTooltips" checked>
+            </div>
+            
+            <div class="control-group">
+                <label>Enable Animations:</label>
+                <input type="checkbox" id="enableAnimations" checked>
+            </div>
+            
+            <button onclick="updateDiagram()">Update Diagram</button>
+            <button onclick="resetToDefaults()">Reset to Defaults</button>
+        </div>
+
+        <h2>Current Configuration</h2>
+        <div class="code-section" id="currentConfig">
+            <!-- Configuration will be displayed here -->
+        </div>
+
+        <h2>Live Diagram</h2>
+        <p>This diagram uses the configuration settings above:</p>
+
+        <!-- The actual diagram with more complex architecture -->
+        <div id="diagram">
+            <api-gateway name="Load Balancer" brand="nginx" connects="auth-service,user-service,order-service" id="gateway">
+            </api-gateway>
+
+            <microservice name="Auth Service" brand="spring-boot" connects="auth-db,cache" id="auth-service">
+            </microservice>
+
+            <microservice name="User Service" brand="nodejs" connects="user-db,cache" id="user-service">
+            </microservice>
+
+            <microservice name="Order Service" brand="python" connects="order-db,message-queue" id="order-service">
+            </microservice>
+
+            <database name="Auth Database" brand="postgresql" id="auth-db">
+            </database>
+
+            <database name="User Database" brand="mongodb" id="user-db">
+            </database>
+
+            <database name="Order Database" brand="mysql" id="order-db">
+            </database>
+
+            <database name="Redis Cache" brand="redis" id="cache">
+            </database>
+
+            <microservice name="Message Queue" brand="rabbitmq" id="message-queue">
+            </microservice>
+        </div>
+
+        <h2>Complete Configuration Example</h2>
+        <p>Here's the complete code with all configuration options:</p>
+        
+        <div class="code-section">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Configured Diagram&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id="diagram" style="width: 100%; height: 600px;"&gt;
+        &lt;api-gateway name="Load Balancer" brand="nginx" connects="auth-service,user-service" id="gateway"&gt;
+        &lt;/api-gateway&gt;
+
+        &lt;microservice name="Auth Service" brand="spring-boot" connects="auth-db" id="auth-service"&gt;
+        &lt;/microservice&gt;
+
+        &lt;microservice name="User Service" brand="nodejs" connects="user-db" id="user-service"&gt;
+        &lt;/microservice&gt;
+
+        &lt;database name="Auth DB" brand="postgresql" id="auth-db"&gt;
+        &lt;/database&gt;
+
+        &lt;database name="User DB" brand="mongodb" id="user-db"&gt;
+        &lt;/database&gt;
+    &lt;/div&gt;
+
+    &lt;script src="https://cdn.jsdelivr.net/npm/html-diagram-library@1.0.0/dist/html-diagram-library.min.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        const diagram = new DiagramLibrary({
+            container: '#diagram',
+            
+            // Layout configuration - controls positioning
+            layout: {
+                forceStrength: 0.4,      // Higher = more movement
+                linkDistance: 150,       // Distance between connected nodes
+                nodeRepulsion: 500,      // How much nodes push apart
+                centerForce: 0.15        // Pull toward center
+            },
+            
+            // Interaction configuration - user controls
+            interaction: {
+                enableZoom: true,        // Mouse wheel zoom
+                enablePan: true,         // Click and drag to pan
+                enableTooltips: true,    // Hover tooltips
+                enableAnimations: true   // Smooth transitions
+            },
+            
+            // Theme configuration - visual appearance
+            theme: 'default',            // or custom theme object
+            
+            // Performance configuration - optimization
+            performance: {
+                maxNodes: 100,           // Warning threshold
+                animationDuration: 400,  // Animation speed (ms)
+                renderThrottle: 16       // Render frequency (ms)
+            }
+        });
+        
+        // Render with error handling
+        diagram.render()
+            .then(() =&gt; console.log('Diagram rendered!'))
+            .catch(error =&gt; console.error('Error:', error));
+            
+        // Add event listeners
+        diagram.on('node:click', (event) =&gt; {
+            alert(`Clicked: ${event.node.label}`);
+        });
+        
+        diagram.on('node:hover', (event) =&gt; {
+            console.log(`Hovering: ${event.node.label}`);
+        });
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+        </div>
+
+        <div class="config-section">
+            <h3>Configuration Tips</h3>
+            <ul>
+                <li><strong>Force Strength:</strong> Start with 0.3, increase for more dynamic layouts</li>
+                <li><strong>Link Distance:</strong> 100-150 works well for most diagrams</li>
+                <li><strong>Node Repulsion:</strong> Increase if nodes overlap, decrease if too spread out</li>
+                <li><strong>Center Force:</strong> Keep low (0.1-0.2) to avoid clustering in center</li>
+                <li><strong>Performance:</strong> Disable animations for diagrams with 50+ nodes</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Include the HTML Diagram Library -->
+    <script src="../../dist/html-diagram-library.js"></script>
+    <script>
+        let diagram;
+        
+        // Initialize with default configuration
+        function initializeDiagram() {
+            const config = getCurrentConfig();
+            
+            // Destroy existing diagram if it exists
+            if (diagram) {
+                diagram.destroy();
+            }
+            
+            // Create new diagram with current configuration
+            diagram = new DiagramLibrary(config);
+            
+            // Render the diagram
+            diagram.render(document.getElementById('diagram').innerHTML)
+                .then(() => {
+                    console.log('Configured diagram rendered successfully');
+                })
+                .catch(error => {
+                    console.error('Error rendering diagram:', error);
+                });
+                
+            // Add event listeners for demonstration
+            diagram.on('node:click', (event) => {
+                alert(`Clicked on: ${event.node.label}\nType: ${event.node.type}`);
+            });
+            
+            // Update the configuration display
+            updateConfigDisplay();
+        }
+        
+        // Get current configuration from controls
+        function getCurrentConfig() {
+            return {
+                container: '#diagram',
+                layout: {
+                    forceStrength: parseFloat(document.getElementById('forceStrength').value),
+                    linkDistance: parseInt(document.getElementById('linkDistance').value),
+                    nodeRepulsion: parseInt(document.getElementById('nodeRepulsion').value),
+                    centerForce: parseFloat(document.getElementById('centerForce').value)
+                },
+                interaction: {
+                    enableZoom: document.getElementById('enableZoom').checked,
+                    enablePan: document.getElementById('enablePan').checked,
+                    enableTooltips: document.getElementById('enableTooltips').checked,
+                    enableAnimations: document.getElementById('enableAnimations').checked
+                },
+                theme: 'default',
+                performance: {
+                    maxNodes: 100,
+                    animationDuration: 300,
+                    renderThrottle: 16
+                }
+            };
+        }
+        
+        // Update the configuration display
+        function updateConfigDisplay() {
+            const config = getCurrentConfig();
+            const configElement = document.getElementById('currentConfig');
+            configElement.textContent = `const diagram = new DiagramLibrary(${JSON.stringify(config, null, 2)});`;
+        }
+        
+        // Update diagram with new configuration
+        function updateDiagram() {
+            initializeDiagram();
+        }
+        
+        // Reset all controls to default values
+        function resetToDefaults() {
+            document.getElementById('forceStrength').value = 0.3;
+            document.getElementById('linkDistance').value = 120;
+            document.getElementById('nodeRepulsion').value = 400;
+            document.getElementById('centerForce').value = 0.1;
+            document.getElementById('enableZoom').checked = true;
+            document.getElementById('enablePan').checked = true;
+            document.getElementById('enableTooltips').checked = true;
+            document.getElementById('enableAnimations').checked = true;
+            
+            updateSliderValues();
+            updateDiagram();
+        }
+        
+        // Update slider value displays
+        function updateSliderValues() {
+            document.getElementById('forceStrengthValue').textContent = document.getElementById('forceStrength').value;
+            document.getElementById('linkDistanceValue').textContent = document.getElementById('linkDistance').value;
+            document.getElementById('nodeRepulsionValue').textContent = document.getElementById('nodeRepulsion').value;
+            document.getElementById('centerForceValue').textContent = document.getElementById('centerForce').value;
+        }
+        
+        // Add event listeners for sliders
+        document.getElementById('forceStrength').addEventListener('input', updateSliderValues);
+        document.getElementById('linkDistance').addEventListener('input', updateSliderValues);
+        document.getElementById('nodeRepulsion').addEventListener('input', updateSliderValues);
+        document.getElementById('centerForce').addEventListener('input', updateSliderValues);
+        
+        // Initialize the diagram when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSliderValues();
+            initializeDiagram();
+        });
+    </script>
+</body>
+</html>

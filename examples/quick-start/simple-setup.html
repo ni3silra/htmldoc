@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Setup - HTML Diagram Library</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        .description {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4caf50;
+        }
+        #diagram {
+            width: 100%;
+            height: 500px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: #fafafa;
+            margin: 20px 0;
+        }
+        .code-section {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        .step {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #f39c12;
+        }
+        .step h3 {
+            margin-top: 0;
+            color: #d68910;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Simple Setup Example</h1>
+        <div class="subtitle">The absolute minimum code needed to create a diagram</div>
+        
+        <div class="description">
+            <strong>What you'll learn:</strong>
+            <ul>
+                <li>How to include the library with just one script tag</li>
+                <li>The minimal HTML needed for a working diagram</li>
+                <li>Basic initialization with default settings</li>
+                <li>How to create a simple 3-component architecture</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <h3>Step 1: Include the Library</h3>
+            <p>Add this single script tag to your HTML page (no installation required):</p>
+            <div class="code-section">
+&lt;script src="https://cdn.jsdelivr.net/npm/html-diagram-library@1.0.0/dist/html-diagram-library.min.js"&gt;&lt;/script&gt;
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: Create a Container</h3>
+            <p>Add a div with width and height where your diagram will appear:</p>
+            <div class="code-section">
+&lt;div id="diagram" style="width: 800px; height: 500px;"&gt;
+    &lt;!-- Your diagram elements will go here --&gt;
+&lt;/div&gt;
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>Step 3: Define Your Components</h3>
+            <p>Use custom HTML tags to define your architecture components:</p>
+            <div class="code-section">
+&lt;div id="diagram" style="width: 800px; height: 500px;"&gt;
+    &lt;api-gateway name="Main Gateway" brand="kong" connects="web-service" id="gateway"&gt;
+    &lt;/api-gateway&gt;
+
+    &lt;microservice name="Web Service" brand="spring-boot" connects="database" id="web-service"&gt;
+    &lt;/microservice&gt;
+
+    &lt;database name="Main Database" brand="postgresql" id="database"&gt;
+    &lt;/database&gt;
+&lt;/div&gt;
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>Step 4: Initialize and Render</h3>
+            <p>Add a script to create and render the diagram:</p>
+            <div class="code-section">
+&lt;script&gt;
+    // Create diagram with default settings
+    const diagram = new DiagramLibrary({
+        container: '#diagram'
+    });
+    
+    // Render the diagram
+    diagram.render();
+&lt;/script&gt;
+            </div>
+        </div>
+
+        <h2>Live Example</h2>
+        <p>Here's the result of the code above:</p>
+
+        <!-- The actual diagram -->
+        <div id="diagram">
+            <!-- Simple 3-component architecture -->
+            <api-gateway name="Main Gateway" brand="kong" connects="web-service" id="gateway">
+            </api-gateway>
+
+            <microservice name="Web Service" brand="spring-boot" connects="database" id="web-service">
+            </microservice>
+
+            <database name="Main Database" brand="postgresql" id="database">
+            </database>
+        </div>
+
+        <div class="description">
+            <strong>What happened:</strong>
+            <ul>
+                <li>The library automatically positioned the components using force-directed layout</li>
+                <li>Connections were drawn based on the "connects" attributes</li>
+                <li>Professional icons were loaded for each component type</li>
+                <li>Interactive features (zoom, pan, tooltips) were enabled by default</li>
+            </ul>
+        </div>
+
+        <h2>Complete Copy-Paste Code</h2>
+        <p>Here's the complete HTML file you can copy and save as a .html file:</p>
+        
+        <div class="code-section">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My First Diagram&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;My Architecture Diagram&lt;/h1&gt;
+    
+    &lt;div id="diagram" style="width: 800px; height: 500px; border: 1px solid #ccc;"&gt;
+        &lt;api-gateway name="Main Gateway" brand="kong" connects="web-service" id="gateway"&gt;
+        &lt;/api-gateway&gt;
+
+        &lt;microservice name="Web Service" brand="spring-boot" connects="database" id="web-service"&gt;
+        &lt;/microservice&gt;
+
+        &lt;database name="Main Database" brand="postgresql" id="database"&gt;
+        &lt;/database&gt;
+    &lt;/div&gt;
+
+    &lt;script src="https://cdn.jsdelivr.net/npm/html-diagram-library@1.0.0/dist/html-diagram-library.min.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        const diagram = new DiagramLibrary({
+            container: '#diagram'
+        });
+        diagram.render();
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+        </div>
+
+        <div class="step">
+            <h3>Next Steps</h3>
+            <p>Try these examples to learn more:</p>
+            <ul>
+                <li><a href="with-configuration.html">With Configuration</a> - Learn how to customize the diagram</li>
+                <li><a href="interactive-features.html">Interactive Features</a> - Add click handlers and custom interactions</li>
+                <li><a href="../basic/microservice-example.html">Basic Examples</a> - More complex architectures</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Include the HTML Diagram Library -->
+    <script src="../../dist/html-diagram-library.js"></script>
+    <script>
+        // Initialize the diagram library with default settings
+        const diagram = new DiagramLibrary({
+            container: '#diagram'
+        });
+
+        // Render the diagram from the HTML content
+        diagram.render(document.getElementById('diagram').innerHTML)
+            .then(() => {
+                console.log('Simple diagram rendered successfully');
+            })
+            .catch(error => {
+                console.error('Error rendering diagram:', error);
+                // Show a user-friendly error message
+                document.getElementById('diagram').innerHTML = 
+                    '<div style="padding: 20px; text-align: center; color: #666;">' +
+                    'Error loading diagram. Please check the browser console for details.' +
+                    '</div>';
+            });
+    </script>
+</body>
+</html>

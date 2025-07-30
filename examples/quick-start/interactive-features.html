@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Features - HTML Diagram Library</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        .description {
+            background: #f3e5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #9c27b0;
+        }
+        #diagram {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: #fafafa;
+            margin: 20px 0;
+        }
+        .code-section {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        .feature-section {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #2e7d32;
+        }
+        .feature-section h3 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+        .controls {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #ff9800;
+        }
+        .event-log {
+            background: #263238;
+            color: #4caf50;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            height: 200px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+        button {
+            background: #2196f3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #1976d2;
+        }
+        button.danger {
+            background: #f44336;
+        }
+        button.danger:hover {
+            background: #d32f2f;
+        }
+        button.success {
+            background: #4caf50;
+        }
+        button.success:hover {
+            background: #388e3c;
+        }
+        .instructions {
+            background: #e1f5fe;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #0288d1;
+        }
+        .instructions h3 {
+            margin-top: 0;
+            color: #0277bd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Interactive Features Example</h1>
+        <div class="subtitle">Learn how to add custom interactions and event handling</div>
+        
+        <div class="description">
+            <strong>What you'll learn:</strong>
+            <ul>
+                <li>How to handle click events on diagram elements</li>
+                <li>How to add custom hover behaviors and tooltips</li>
+                <li>How to implement zoom and pan controls</li>
+                <li>How to add custom animations and transitions</li>
+                <li>How to create interactive controls and buttons</li>
+            </ul>
+        </div>
+
+        <div class="instructions">
+            <h3>Try These Interactions</h3>
+            <ul>
+                <li><strong>Click</strong> on any element to see detailed information</li>
+                <li><strong>Hover</strong> over elements to see tooltips and highlighting</li>
+                <li><strong>Mouse wheel</strong> to zoom in and out</li>
+                <li><strong>Click and drag</strong> to pan around the diagram</li>
+                <li><strong>Use the controls below</strong> to trigger custom actions</li>
+            </ul>
+        </div>
+
+        <div class="controls">
+            <h3>Interactive Controls</h3>
+            <button onclick="highlightServices()">Highlight Services</button>
+            <button onclick="highlightDatabases()">Highlight Databases</button>
+            <button onclick="showConnections()">Show All Connections</button>
+            <button onclick="resetHighlights()" class="danger">Reset Highlights</button>
+            <button onclick="centerDiagram()" class="success">Center Diagram</button>
+            <button onclick="fitToScreen()" class="success">Fit to Screen</button>
+            <button onclick="clearEventLog()">Clear Event Log</button>
+        </div>
+
+        <h2>Live Diagram</h2>
+        <p>Interact with this diagram to see the event handling in action:</p>
+
+        <!-- The actual diagram with comprehensive architecture -->
+        <div id="diagram">
+            <api-gateway name="API Gateway" brand="kong" connects="auth-service,user-service,order-service,notification-service" id="gateway">
+            </api-gateway>
+
+            <microservice name="Auth Service" brand="spring-boot" connects="auth-db,cache" id="auth-service">
+            </microservice>
+
+            <microservice name="User Service" brand="nodejs" connects="user-db,cache" id="user-service">
+            </microservice>
+
+            <microservice name="Order Service" brand="python" connects="order-db,message-queue" id="order-service">
+            </microservice>
+
+            <microservice name="Notification Service" brand="golang" connects="message-queue,notification-db" id="notification-service">
+            </microservice>
+
+            <database name="Auth Database" brand="postgresql" id="auth-db">
+            </database>
+
+            <database name="User Database" brand="mongodb" id="user-db">
+            </database>
+
+            <database name="Order Database" brand="mysql" id="order-db">
+            </database>
+
+            <database name="Notification DB" brand="postgresql" id="notification-db">
+            </database>
+
+            <database name="Redis Cache" brand="redis" id="cache">
+            </database>
+
+            <microservice name="Message Queue" brand="rabbitmq" id="message-queue">
+            </microservice>
+        </div>
+
+        <h2>Event Log</h2>
+        <p>Watch this log to see events as they happen:</p>
+        <div id="eventLog" class="event-log">
+            [Ready] Diagram initialized. Try interacting with the elements above!
+        </div>
+
+        <div class="feature-section">
+            <h3>Available Event Types</h3>
+            <ul>
+                <li><strong>node:click</strong> - Fired when a user clicks on a diagram element</li>
+                <li><strong>node:hover</strong> - Fired when a user hovers over an element</li>
+                <li><strong>node:leave</strong> - Fired when the mouse leaves an element</li>
+                <li><strong>diagram:zoom</strong> - Fired when the user zooms the diagram</li>
+                <li><strong>diagram:pan</strong> - Fired when the user pans the diagram</li>
+                <li><strong>layout:complete</strong> - Fired when the layout calculation finishes</li>
+            </ul>
+        </div>
+
+        <h2>Complete Interactive Code Example</h2>
+        <div class="code-section">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Interactive Diagram&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id="diagram" style="width: 100%; height: 600px;"&gt;
+        &lt;api-gateway name="API Gateway" brand="kong" connects="user-service,order-service" id="gateway"&gt;
+        &lt;/api-gateway&gt;
+
+        &lt;microservice name="User Service" brand="spring-boot" connects="user-db" id="user-service"&gt;
+        &lt;/microservice&gt;
+
+        &lt;microservice name="Order Service" brand="nodejs" connects="order-db" id="order-service"&gt;
+        &lt;/microservice&gt;
+
+        &lt;database name="User DB" brand="postgresql" id="user-db"&gt;
+        &lt;/database&gt;
+
+        &lt;database name="Order DB" brand="mongodb" id="order-db"&gt;
+        &lt;/database&gt;
+    &lt;/div&gt;
+
+    &lt;script src="https://cdn.jsdelivr.net/npm/html-diagram-library@1.0.0/dist/html-diagram-library.min.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        const diagram = new DiagramLibrary({
+            container: '#diagram',
+            interaction: {
+                enableZoom: true,
+                enablePan: true,
+                enableTooltips: true,
+                enableAnimations: true
+            }
+        });
+        
+        // Render the diagram
+        diagram.render()
+            .then(() =&gt; console.log('Interactive diagram ready!'));
+        
+        // Handle click events
+        diagram.on('node:click', (event) =&gt; {
+            const node = event.node;
+            alert(`Element Details:
+Name: ${node.label}
+Type: ${node.type}
+ID: ${node.id}
+Connections: ${node.connections.join(', ')}`);
+        });
+        
+        // Handle hover events
+        diagram.on('node:hover', (event) =&gt; {
+            console.log(`Hovering over: ${event.node.label}`);
+            // Custom hover behavior here
+        });
+        
+        // Handle zoom events
+        diagram.on('diagram:zoom', (event) =&gt; {
+            console.log(`Zoom level: ${event.scale}`);
+        });
+        
+        // Handle pan events
+        diagram.on('diagram:pan', (event) =&gt; {
+            console.log(`Pan position: ${event.x}, ${event.y}`);
+        });
+        
+        // Custom functions for interactive controls
+        function highlightServices() {
+            diagram.highlightNodesByType('microservice');
+        }
+        
+        function highlightDatabases() {
+            diagram.highlightNodesByType('database');
+        }
+        
+        function centerDiagram() {
+            diagram.centerView();
+        }
+        
+        function fitToScreen() {
+            diagram.fitToContainer();
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+        </div>
+
+        <div class="feature-section">
+            <h3>Advanced Interaction Patterns</h3>
+            <p>Here are some advanced patterns you can implement:</p>
+            
+            <div class="code-section">
+// Double-click to focus on an element
+diagram.on('node:dblclick', (event) =&gt; {
+    diagram.focusOnNode(event.node.id, { 
+        zoom: 1.5, 
+        duration: 500 
+    });
+});
+
+// Right-click context menu
+diagram.on('node:contextmenu', (event) =&gt; {
+    event.preventDefault();
+    showContextMenu(event.node, event.x, event.y);
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (event) =&gt; {
+    if (event.key === 'r') diagram.resetView();
+    if (event.key === 'f') diagram.fitToContainer();
+    if (event.key === 'c') diagram.centerView();
+});
+
+// Custom animations
+function pulseNode(nodeId) {
+    diagram.animateNode(nodeId, {
+        scale: [1, 1.2, 1],
+        duration: 600,
+        easing: 'ease-in-out'
+    });
+}
+
+// Filter and search
+function filterByType(type) {
+    diagram.filterNodes((node) =&gt; node.type === type);
+}
+
+function searchNodes(query) {
+    const matches = diagram.findNodes((node) =&gt; 
+        node.label.toLowerCase().includes(query.toLowerCase())
+    );
+    diagram.highlightNodes(matches);
+}
+            </div>
+        </div>
+    </div>
+
+    <!-- Include the HTML Diagram Library -->
+    <script src="../../dist/html-diagram-library.js"></script>
+    <script>
+        let diagram;
+        
+        // Initialize the interactive diagram
+        function initializeDiagram() {
+            diagram = new DiagramLibrary({
+                container: '#diagram',
+                layout: {
+                    forceStrength: 0.3,
+                    linkDistance: 140,
+                    nodeRepulsion: 450,
+                    centerForce: 0.1
+                },
+                interaction: {
+                    enableZoom: true,
+                    enablePan: true,
+                    enableTooltips: true,
+                    enableAnimations: true
+                },
+                theme: 'default'
+            });
+
+            // Render the diagram
+            diagram.render(document.getElementById('diagram').innerHTML)
+                .then(() => {
+                    logEvent('Diagram rendered successfully');
+                    setupEventHandlers();
+                })
+                .catch(error => {
+                    logEvent(`Error rendering diagram: ${error.message}`, 'error');
+                });
+        }
+        
+        // Set up all event handlers
+        function setupEventHandlers() {
+            // Node click events
+            diagram.on('node:click', (event) => {
+                const node = event.node;
+                logEvent(`Clicked: ${node.label} (${node.type})`);
+                
+                // Show detailed information
+                const details = `Element Details:
+Name: ${node.label}
+Type: ${node.type}
+ID: ${node.id}
+Brand: ${node.brand || 'Not specified'}`;
+                
+                alert(details);
+            });
+            
+            // Node hover events
+            diagram.on('node:hover', (event) => {
+                const node = event.node;
+                logEvent(`Hovering: ${node.label}`);
+            });
+            
+            // Node leave events
+            diagram.on('node:leave', (event) => {
+                const node = event.node;
+                logEvent(`Left: ${node.label}`);
+            });
+            
+            // Zoom events
+            diagram.on('diagram:zoom', (event) => {
+                logEvent(`Zoom: ${event.scale.toFixed(2)}x`);
+            });
+            
+            // Pan events
+            diagram.on('diagram:pan', (event) => {
+                logEvent(`Pan: (${event.x.toFixed(0)}, ${event.y.toFixed(0)})`);
+            });
+            
+            // Layout complete events
+            diagram.on('layout:complete', (event) => {
+                logEvent('Layout calculation completed');
+            });
+        }
+        
+        // Log events to the event log
+        function logEvent(message, type = 'info') {
+            const eventLog = document.getElementById('eventLog');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}\n`;
+            
+            eventLog.textContent += logEntry;
+            eventLog.scrollTop = eventLog.scrollHeight;
+        }
+        
+        // Interactive control functions
+        function highlightServices() {
+            logEvent('Highlighting all microservices');
+            // This would be implemented in the actual library
+            // diagram.highlightNodesByType('microservice');
+        }
+        
+        function highlightDatabases() {
+            logEvent('Highlighting all databases');
+            // This would be implemented in the actual library
+            // diagram.highlightNodesByType('database');
+        }
+        
+        function showConnections() {
+            logEvent('Showing all connections');
+            // This would be implemented in the actual library
+            // diagram.emphasizeConnections();
+        }
+        
+        function resetHighlights() {
+            logEvent('Resetting all highlights');
+            // This would be implemented in the actual library
+            // diagram.clearHighlights();
+        }
+        
+        function centerDiagram() {
+            logEvent('Centering diagram view');
+            // This would be implemented in the actual library
+            // diagram.centerView();
+        }
+        
+        function fitToScreen() {
+            logEvent('Fitting diagram to screen');
+            // This would be implemented in the actual library
+            // diagram.fitToContainer();
+        }
+        
+        function clearEventLog() {
+            document.getElementById('eventLog').textContent = '[Ready] Event log cleared. Continue interacting with the diagram!\n';
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDiagram();
+        });
+    </script>
+</body>
+</html>
