@@ -249,7 +249,7 @@
 
     &lt;script src="https://cdn.jsdelivr.net/npm/html-diagram-library@1.0.0/dist/html-diagram-library.min.js"&gt;&lt;/script&gt;
     &lt;script&gt;
-        const diagram = new DiagramLibrary({
+        const diagram = new HTMLDiagramLibrary({
             container: '#diagram',
             
             // Layout configuration - controls positioning
@@ -324,7 +324,7 @@
             }
             
             // Create new diagram with current configuration
-            diagram = new DiagramLibrary(config);
+            diagram = new HTMLDiagramLibrary(config);
             
             // Render the diagram
             diagram.render(document.getElementById('diagram').innerHTML)
@@ -373,7 +373,7 @@
         function updateConfigDisplay() {
             const config = getCurrentConfig();
             const configElement = document.getElementById('currentConfig');
-            configElement.textContent = `const diagram = new DiagramLibrary(${JSON.stringify(config, null, 2)});`;
+            configElement.textContent = `const diagram = new HTMLDiagramLibrary(${JSON.stringify(config, null, 2)});`;
         }
         
         // Update diagram with new configuration

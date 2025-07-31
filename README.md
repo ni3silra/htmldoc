@@ -61,11 +61,11 @@ Add a script to initialize the library:
 
 ```html
 <script>
-  const diagram = new DiagramLibrary({
-    container: '#my-diagram'
-  });
+  const diagram = new HTMLDiagramLibrary('#my-diagram');
   
-  diagram.render();
+  diagram.initialize().then(() => {
+    return diagram.render();
+  });
 </script>
 ```
 
@@ -108,8 +108,7 @@ Here's a full working HTML page you can copy and paste:
     
     <script>
         // Initialize and render
-        const diagram = new DiagramLibrary({
-            container: '#diagram',
+        const diagram = new HTMLDiagramLibrary('#diagram', {
             theme: 'default',
             interaction: {
                 enableZoom: true,
@@ -118,9 +117,13 @@ Here's a full working HTML page you can copy and paste:
             }
         });
         
-        diagram.render()
-            .then(() => console.log('Diagram rendered successfully!'))
-            .catch(error => console.error('Error:', error));
+        diagram.initialize().then(() => {
+            return diagram.render();
+        }).then(() => {
+            console.log('Diagram rendered successfully!');
+        }).catch(error => {
+            console.error('Error:', error);
+        });
     </script>
 </body>
 </html>
@@ -168,9 +171,7 @@ Here's a full working HTML page you can copy and paste:
 You can customize the diagram behavior with configuration options:
 
 ```javascript
-const diagram = new DiagramLibrary({
-    container: '#diagram',           // CSS selector for container
-    
+const diagram = new HTMLDiagramLibrary('#diagram', {
     // Layout configuration
     layout: {
         forceStrength: 0.3,         // Overall force strength (0-1)
@@ -253,14 +254,28 @@ We provide ready-to-use examples in the `examples/` directory:
    <script src="https://cdn.jsdelivr.net/npm/html-diagram-library@1.0.0/dist/html-diagram-library.min.js"></script>
    ```
 
-2. **Verify container has dimensions:** The container must have width and height
+2. **Use the correct class name and constructor:** The library is exported as `HTMLDiagramLibrary` and expects container as first parameter
+   ```html
+   <!-- Correct -->
+   <script>
+     const diagram = new HTMLDiagramLibrary('#diagram');
+     diagram.initialize().then(() => diagram.render());
+   </script>
+   
+   <!-- Incorrect -->
+   <script>
+     const diagram = new DiagramLibrary({ container: '#diagram' });
+   </script>
+   ```
+
+3. **Verify container has dimensions:** The container must have width and height
    ```html
    <div id="diagram" style="width: 800px; height: 600px;">
    ```
 
-3. **Check browser console:** Look for JavaScript errors that might prevent rendering
+4. **Check browser console:** Look for JavaScript errors that might prevent rendering
 
-4. **Validate HTML syntax:** Ensure all custom elements have proper closing tags
+5. **Validate HTML syntax:** Ensure all custom elements have proper closing tags
    ```html
    <!-- Correct -->
    <microservice name="My Service" id="service1"></microservice>
@@ -295,7 +310,7 @@ We provide ready-to-use examples in the `examples/` directory:
 1. **Reduce node count:** Consider breaking large diagrams into smaller ones
 2. **Adjust performance settings:**
    ```javascript
-   const diagram = new DiagramLibrary({
+   const diagram = new HTMLDiagramLibrary({
        performance: {
            maxNodes: 50,           // Reduce if needed
            animationDuration: 150, // Faster animations

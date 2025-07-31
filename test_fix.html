@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Fix</title>
+</head>
+
+<body>
+    <h1>Test HTML Diagram Library</h1>
+
+    <div id="diagram" style="width: 800px; height: 500px; border: 1px solid #ccc;">
+        <api-gateway name="Main Gateway" brand="kong" connects="web-service" id="gateway">
+        </api-gateway>
+
+        <microservice name="Web Service" brand="spring-boot" connects="database" id="web-service">
+        </microservice>
+
+        <database name="Main Database" brand="postgresql" id="database">
+        </database>
+    </div>
+
+    <script src="dist/html-diagram-library.js"></script>
+    <script>
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('DOM loaded, HTMLDiagramLibrary available:', typeof HTMLDiagramLibrary);
+
+            // Verify the container element exists
+            const containerElement = document.getElementById('diagram');
+            console.log('Container element found:', containerElement);
+            console.log('Container element ID:', containerElement ? containerElement.id : 'null');
+            console.log('Container element tagName:', containerElement ? containerElement.tagName : 'null');
+
+            if (typeof HTMLDiagramLibrary !== 'undefined' && containerElement) {
+                try {
+                    console.log('Attempting to create HTMLDiagramLibrary instance...');
+
+                    // Test if document.querySelector works in this context
+                    console.log('Testing document.querySelector("#diagram"):', document.querySelector('#diagram'));
+
+                    // Try with selector first - FIXED: container should be first parameter
+                    console.log('Trying with selector "#diagram"...');
+                    const diagram = new HTMLDiagramLibrary('#diagram', {
+                        icons: {
+                            enableCDN: false,  // Disable CDN to avoid CORS issues
+                            enableFallbacks: true
+                        },
+                        theme: {
+                            name: 'default'  // Pass theme as object instead of string
+                        }
+                    });
+
+                    console.log('HTMLDiagramLibrary instance created successfully');
+
+                    // Initialize the diagram first
+                    console.log('Initializing diagram...');
+                    diagram.initialize()
+                        .then(() => {
+                            console.log('Diagram initialized successfully');
+
+                            // Now try to render
+                            const htmlContent = containerElement.innerHTML;
+                            console.log('HTML content to render:', htmlContent);
+
+                            return diagram.render(htmlContent);
+                        })
+                        .then(() => {
+                            console.log('Diagram rendered successfully!');
+                        })
+                        .catch(error => {
+                            console.error('Error during initialization or rendering:', error);
+                        });
+
+                } catch (error) {
+                    console.error('Error creating diagram:', error);
+                    console.error('Error details:', error.message);
+                    console.error('Error stack:', error.stack);
+
+                    // Try alternative approach with DOM element
+                    try {
+                        console.log('Trying alternative approach with DOM element...');
+                        const diagram2 = new HTMLDiagramLibrary(containerElement);
+                        console.log('Alternative approach worked!');
+                    } catch (error2) {
+                        console.error('Alternative approach also failed:', error2);
+                    }
+                }
+            } else {
+                if (typeof HTMLDiagramLibrary === 'undefined') {
+                    console.error('HTMLDiagramLibrary is not defined');
+                }
+                if (!containerElement) {
+                    console.error('Container element not found');
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
